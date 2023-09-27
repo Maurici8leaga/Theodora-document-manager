@@ -1,7 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import useLocalStorage from "../../hooks/useLocalStorage";
 import "../auth/Login.css";
 
 const Login = () => {
+	const navigate = useNavigate();
+
+	// states
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [setStoredUser] = useLocalStorage("token", "set");
+
+	const loginUser = (event) => {
+		event.preventDefault();
+		setStoredUser(email);
+		setEmail("");
+		setPassword("");
+		navigate("/document-manager");
+	};
+
 	return (
 		<div className="container-md">
 			<div className="text-center pt-extra">
@@ -10,22 +27,29 @@ const Login = () => {
 
 					<p className="p">Enter your credentials</p>
 
-					<form className="container">
+					<form className="container" onSubmit={loginUser}>
 						<div className="mb-3">
 							<input
+								id="email"
+								name="email"
 								type="email"
+								value={email}
 								className="form-control"
-								id="exampleInputEmail1"
-								aria-describedby="emailHelp"
 								placeholder="Email address"
+								onChange={(event) => setEmail(event.target.value)}
+								required
 							/>
 						</div>
 						<div className="mb-3">
 							<input
+								id="password"
+								name="password"
 								type="password"
+								value={password}
 								className="form-control"
-								id="exampleInputPassword1"
 								placeholder="Password"
+								onChange={(event) => setPassword(event.target.value)}
+								required
 							/>
 						</div>
 						<button type="submit" className="btn btn-primary">
