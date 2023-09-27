@@ -1,0 +1,17 @@
+.pt-extra {
+	padding-top: 8rem;
+}
+
+.form-container {
+	/* display: flex;
+	justify-content: center;
+	align-items: center; */
+
+	width: 360px;
+	height: 400px;
+	margin: auto;
+	/* padding-top: 8rem; */
+	border: 1px solid grey;
+	border-radius: 6px;
+	box-shadow: 25px 25px 50px #cacaca, -25px -25px 50px #f6f6f6;
+}
