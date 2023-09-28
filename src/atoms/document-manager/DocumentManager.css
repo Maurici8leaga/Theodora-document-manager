@@ -1,0 +1,13 @@
+.pt-extra {
+	padding-top: 8rem;
+}
+
+.container-form {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	width: 400px;
+	height: auto;
+	margin: auto;
+}
