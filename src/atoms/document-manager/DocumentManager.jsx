@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 // component
@@ -6,9 +6,11 @@ import CreateFile from "../../molecules/modal/create-file-modal/CreateFile";
 import EditFile from "../..//molecules/modal/edit-file-modal/EditFile";
 // static data
 import useLocalStorage from "../../hooks/useLocalStorage";
+import { fileService } from "../../services/api/files.service";
 import {
 	addDocument,
 	deleteDocument,
+	getDocument,
 } from "../../redux-toolkit/reducers/files/files.reducer";
 import { BsPencil, BsTrash3 } from "react-icons/bs";
 // css
@@ -27,17 +29,33 @@ const DocumentManager = () => {
 
 	const [idFile, setIdFile] = useState("");
 
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		// como se quiere que cada vez que inicie este componet carge laa data se coloca esta funcion dentro
+		const fetchFiles = async () => {
+			// toda llamada a un api es async
+			try {
+				const response = await fileService.getFiles(); //request al API
+				dispatch(getDocument(response.data));
+			} catch (error) {
+				console.log(error.stack);
+			}
+		};
+		fetchFiles();
+	}, [dispatch]);
+
 	const logOut = () => {
 		setUserAuthenticated(deleteStoredUser);
 	};
-
-	const dispatch = useDispatch();
 
 	const createFile = (event) => {
 		event.preventDefault();
 
 		const maxId =
-			files.length > 0 ? Math.max(...files.map((file) => file.id)) : 0;
+			files.length > 0
+				? Math.max(...files.documents.map((file) => file.id))
+				: 0;
 		// Math.max calcula el mayor elemento del array, en este caso el id, y si no tiene algun se le define 0
 		// se usa "...files." porque para Math.max cuando se quiere calcular el mayor valor de un array se usa asi
 
@@ -94,7 +112,7 @@ const DocumentManager = () => {
 						createFile={createFile}
 					/>
 
-					<EditFile idFile={idFile} setTitlefile={setTitlefile} />
+					<EditFile idFile={idFile} />
 
 					<div className="container text-center mt-5">
 						<table className="table">
@@ -107,30 +125,38 @@ const DocumentManager = () => {
 							</thead>
 							<tbody>
 								{/* esto es lo que debe ir dentro del map */}
-								{files.map((item, index) => (
-									<tr key={index}>
-										<td>{item.id}</td>
-										<td>{item.title}</td>
-										<td className="d-flex flex-row gap-3 justify-content-center">
-											<button
-												type="button"
-												className="btn btn-warning d-flex text-center"
-												data-bs-toggle="modal"
-												data-bs-target="#editModal"
-												onClick={() => setIdFile(item.id)}
-											>
-												<BsPencil />
-											</button>
-											<button
-												type="button"
-												className="btn btn-danger d-flex"
-												onClick={() => deleteFile(item.id)}
-											>
-												<BsTrash3 />
-											</button>
-										</td>
+								{files.documents ? (
+									files.documents.map((item, index) => (
+										<tr key={index}>
+											<td>{item.id}</td>
+											<td>{item.title}</td>
+											<td className="d-flex flex-row gap-3 justify-content-center">
+												<button
+													type="button"
+													className="btn btn-warning d-flex text-center"
+													data-bs-toggle="modal"
+													data-bs-target="#editModal"
+													onClick={() => setIdFile(item.id)}
+												>
+													<BsPencil />
+												</button>
+												<button
+													type="button"
+													className="btn btn-danger d-flex"
+													onClick={() => deleteFile(item.id)}
+												>
+													<BsTrash3 />
+												</button>
+											</td>
+										</tr>
+									))
+								) : (
+									<tr>
+										<td></td>
+										<td>There no are documents yet</td>
+										<td></td>
 									</tr>
-								))}
+								)}
 							</tbody>
 						</table>
 					</div>

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
 
 const EditFile = (prop) => {
-	const { idFile, setTitlefile } = prop;
+	const { idFile } = prop;
 
 	const files = useSelector((state) => state.files);
 
@@ -13,8 +13,8 @@ const EditFile = (prop) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (idFile !== undefined) {
-			const fileSelected = files.find((item) => item.id === idFile);
+		if (idFile !== undefined && files.documents) {
+			const fileSelected = files.documents.find((item) => item.id === idFile);
 			if (fileSelected) {
 				setNewTitle(fileSelected.title);
 				setDocumentUpdate(fileSelected);
