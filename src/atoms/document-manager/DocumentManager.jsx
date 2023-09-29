@@ -1,15 +1,22 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+// component
+import CreateFile from "../../molecules/modal/create-file-modal/CreateFile";
+import EditFile from "../..//molecules/modal/edit-file-modal/EditFile";
+// static data
 import useLocalStorage from "../../hooks/useLocalStorage";
+import {
+	addDocument,
+	deleteDocument,
+} from "../../redux-toolkit/reducers/files/files.reducer";
 import { BsPencil, BsTrash3 } from "react-icons/bs";
+// css
 import "../document-manager/DocumentManager.css";
 
 const DocumentManager = () => {
 	const files = useSelector((state) => state.files);
 	// useSelector es un hook  de react-redux que permite extraer data del state de store
-
-	console.log(files[files.length - 1].id);
 
 	const [setStoredUser] = useLocalStorage("token", "get");
 	const [deleteStoredUser] = useLocalStorage("token", "delete");
@@ -18,14 +25,38 @@ const DocumentManager = () => {
 	const [titleFile, setTitlefile] = useState("");
 	const [document, setDocument] = useState("");
 
+	const [idFile, setIdFile] = useState("");
+
 	const logOut = () => {
 		setUserAuthenticated(deleteStoredUser);
 	};
 
+	const dispatch = useDispatch();
+
 	const createFile = (event) => {
 		event.preventDefault();
+
+		const maxId =
+			files.length > 0 ? Math.max(...files.map((file) => file.id)) : 0;
+		// Math.max calcula el mayor elemento del array, en este caso el id, y si no tiene algun se le define 0
+		// se usa "...files." porque para Math.max cuando se quiere calcular el mayor valor de un array se usa asi
+
+		dispatch(
+			// aqui se usa el actions para crear un nuevo file
+			addDocument({
+				// se le debe pasar id, title, y docuemnt ya que en el actions esta esperando esos 3 documentos
+				id: maxId + 1, //aqui se le va a sumar 1 siempre, ya sea 0 o tenga valor el length y id
+				title: titleFile,
+				document: document,
+			})
+		);
 		setTitlefile("");
 		setDocument("");
+	};
+
+	const deleteFile = (id) => {
+		dispatch(deleteDocument({ id: id }));
+		// en este se pasa solo id porque el action esta esperando el id del document
 	};
 
 	return (
@@ -33,7 +64,7 @@ const DocumentManager = () => {
 			{userAuthenticated ? (
 				<div className="container-md text-center">
 					<div className="d-flex flex-row justify-content-evenly mt-5">
-						<h2>List of documents</h2>
+						<h2>THEODORA</h2>
 						<button
 							type="button"
 							className="btn btn-primary"
@@ -43,37 +74,27 @@ const DocumentManager = () => {
 						</button>
 					</div>
 
-					<div className="d-flex flex-column justify-content-center mt-5">
-						<form onSubmit={createFile}>
-							<div className="form-floating">
-								<input
-									id="title-File"
-									name="title"
-									type="text"
-									value={titleFile}
-									className="form-control"
-									placeholder="file name"
-									onChange={(event) => setTitlefile(event.target.value)}
-									required
-								/>
-								<label>File name</label>
-							</div>
-							<div className="mb-3">
-								<input
-									className="form-control"
-									type="file"
-									name="document"
-									id="file"
-									value={document}
-									onChange={(event) => setDocument(event.target.value)}
-									required
-								/>
-							</div>
-							<button type="submit" className="btn btn-primary d-flex">
-								Agregar
-							</button>
-						</form>
+					<div className="d-flex d-flex flex-row justify-content-center mt-5">
+						<h3 className="h3 mx-5">List of Documents</h3>
+						<button
+							type="button"
+							className="btn btn-primary"
+							data-bs-toggle="modal"
+							data-bs-target="#createModal"
+						>
+							Create a file
+						</button>
 					</div>
+
+					<CreateFile
+						titleFile={titleFile}
+						setTitlefile={setTitlefile}
+						document={document}
+						setDocument={setDocument}
+						createFile={createFile}
+					/>
+
+					<EditFile idFile={idFile} setTitlefile={setTitlefile} />
 
 					<div className="container text-center mt-5">
 						<table className="table">
@@ -94,10 +115,17 @@ const DocumentManager = () => {
 											<button
 												type="button"
 												className="btn btn-warning d-flex text-center"
+												data-bs-toggle="modal"
+												data-bs-target="#editModal"
+												onClick={() => setIdFile(item.id)}
 											>
 												<BsPencil />
 											</button>
-											<button type="button" className="btn btn-danger d-flex">
+											<button
+												type="button"
+												className="btn btn-danger d-flex"
+												onClick={() => deleteFile(item.id)}
+											>
 												<BsTrash3 />
 											</button>
 										</td>
