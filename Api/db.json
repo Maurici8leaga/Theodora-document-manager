@@ -1,3 +1,19 @@
 {
-  "files": []
+  "files": [
+    {
+      "id": 1,
+      "title": "Curriculum vitae",
+      "document": "./src/assets/documents/CV_Mauricio_Oleaga.pdf"
+    },
+    {
+      "id": 2,
+      "title": "Cover letter",
+      "document": "./src/assets/documents/Cover_letter.txt"
+    },
+    {
+      "id": 3,
+      "title": "Contrato",
+      "document": "./src/assets/documents/Contract_example.doc"
+    }
+  ]
 }

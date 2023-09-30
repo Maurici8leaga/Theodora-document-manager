@@ -2,6 +2,15 @@ import React from "react";
 
 const CreateFile = (prop) => {
 	const { titleFile, setTitlefile, document, setDocument, createFile } = prop;
+
+	const hadleFile = (event) => {
+		const fileSelected = event.target.files[0];
+		if (fileSelected) {
+			// escogemops solo el type porque con el vamos a simular un archivo
+			setDocument(fileSelected.type);
+		}
+	};
+
 	return (
 		<div
 			id="createModal"
@@ -45,8 +54,7 @@ const CreateFile = (prop) => {
 									// este atributo accept permite definir cuale tipos de archivos puede seleccionar el usuario
 									// estos tipos de formatos se llaman MIME  https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 									accept="application/pdf, text/plain, application/msword"
-									value={document}
-									onChange={(event) => setDocument(event.target.value)}
+									onChange={hadleFile}
 									required
 								/>
 							</div>

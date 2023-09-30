@@ -1,17 +1,5 @@
-export const fakeFiles = [
-	{
-		id: 1,
-		title: "Curriculum Viate",
-		document: "/docs/fake-document",
-	},
-	{
-		id: 2,
-		title: "Contrato",
-		document: "/docs/fake-document/page-1",
-	},
-	{
-		id: 3,
-		title: "Certificado",
-		document: "/docs/fake-document3",
-	},
-];
+export const pdfFileExample = "./src/assets/documents/CV_Mauricio_Oleaga.pdf";
+
+export const txtFileExample = "./src/assets/documents/Cover_letter.txt";
+
+export const wordFileExample = "./src/assets/documents/Contract_example.doc";

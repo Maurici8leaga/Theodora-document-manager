@@ -13,6 +13,11 @@ import {
 	getDocument,
 } from "../../redux-toolkit/reducers/files/files.reducer";
 import { BsPencil, BsTrash3 } from "react-icons/bs";
+import {
+	pdfFileExample,
+	txtFileExample,
+	wordFileExample,
+} from "../../services/utils/static.data";
 // css
 import "../document-manager/DocumentManager.css";
 
@@ -58,10 +63,20 @@ const DocumentManager = () => {
 			// Math.max calcula el mayor elemento del array, en este caso el id, y si no tiene algun se le define 0
 			// se usa "...files." porque para Math.max cuando se quiere calcular el mayor valor de un array se usa asi
 
+			// creamos este condicional para poder usar mock conn los archivos y asi lo pueda leer
+			let documentPath;
+			if (document === "application/pdf") {
+				documentPath = pdfFileExample;
+			} else if (document === "application/msword") {
+				documentPath = wordFileExample;
+			} else {
+				documentPath = txtFileExample;
+			}
+
 			const response = await fileService.createFile({
 				id: maxId + 1,
 				title: titleFile,
-				document: document,
+				document: documentPath,
 			});
 
 			dispatch(
