@@ -49,32 +49,46 @@ const DocumentManager = () => {
 		setUserAuthenticated(deleteStoredUser);
 	};
 
-	const createFile = (event) => {
-		event.preventDefault();
+	const postFile = async () => {
+		try {
+			const maxId =
+				files.documents.length > 0
+					? Math.max(...files.documents.map((file) => file.id))
+					: 0;
+			// Math.max calcula el mayor elemento del array, en este caso el id, y si no tiene algun se le define 0
+			// se usa "...files." porque para Math.max cuando se quiere calcular el mayor valor de un array se usa asi
 
-		const maxId =
-			files.length > 0
-				? Math.max(...files.documents.map((file) => file.id))
-				: 0;
-		// Math.max calcula el mayor elemento del array, en este caso el id, y si no tiene algun se le define 0
-		// se usa "...files." porque para Math.max cuando se quiere calcular el mayor valor de un array se usa asi
-
-		dispatch(
-			// aqui se usa el actions para crear un nuevo file
-			addDocument({
-				// se le debe pasar id, title, y docuemnt ya que en el actions esta esperando esos 3 documentos
-				id: maxId + 1, //aqui se le va a sumar 1 siempre, ya sea 0 o tenga valor el length y id
+			const response = await fileService.createFile({
+				id: maxId + 1,
 				title: titleFile,
 				document: document,
-			})
-		);
+			});
+
+			dispatch(
+				// aqui se usa el actions para crear un nuevo file
+				addDocument(response.data)
+			);
+		} catch (error) {
+			console.log(error.stack);
+		}
+	};
+
+	const createFile = (event) => {
+		event.preventDefault();
+		postFile();
 		setTitlefile("");
 		setDocument("");
 	};
 
-	const deleteFile = (id) => {
-		dispatch(deleteDocument({ id: id }));
-		// en este se pasa solo id porque el action esta esperando el id del document
+	const deleteFile = async (id) => {
+		try {
+			await fileService.deleteFile({ id: id });
+
+			dispatch(deleteDocument({ id: id }));
+			// en este se pasa solo id porque el reducer esta esperando el id del document
+		} catch (error) {
+			console.log(error.stack);
+		}
 	};
 
 	return (
@@ -124,8 +138,7 @@ const DocumentManager = () => {
 								</tr>
 							</thead>
 							<tbody>
-								{/* esto es lo que debe ir dentro del map */}
-								{files.documents ? (
+								{files.documents && files.documents.length > 0 ? (
 									files.documents.map((item, index) => (
 										<tr key={index}>
 											<td>{item.id}</td>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
+import { fileService } from "../../../services/api/files.service";
 
 const EditFile = (prop) => {
 	const { idFile } = prop;
@@ -22,16 +23,23 @@ const EditFile = (prop) => {
 		}
 	}, [idFile, files]);
 
-	const updateFile = (event) => {
-		event.preventDefault();
-		dispatch(
-			// aqui se usa el action de update para actualizar el document
-			updateDocument({
+	const updateFile = async (event) => {
+		try {
+			event.preventDefault();
+
+			const response = await fileService.updateFile({
 				id: documentUpdate.id,
 				title: newTitle,
 				document: documentUpdate.document,
-			})
-		);
+			});
+
+			dispatch(
+				// aqui se usa el action de update para actualizar el document
+				updateDocument(response.data)
+			);
+		} catch (error) {
+			console.log(error.stack);
+		}
 	};
 
 	return (

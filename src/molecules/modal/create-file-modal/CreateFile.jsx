@@ -42,7 +42,9 @@ const CreateFile = (prop) => {
 									className="form-control"
 									type="file"
 									name="document"
-									id="file"
+									// este atributo accept permite definir cuale tipos de archivos puede seleccionar el usuario
+									// estos tipos de formatos se llaman MIME  https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+									accept="application/pdf, text/plain, application/msword"
 									value={document}
 									onChange={(event) => setDocument(event.target.value)}
 									required
