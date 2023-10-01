@@ -1,7 +1,7 @@
 import React from "react";
 
 const CreateFile = (prop) => {
-	const { titleFile, setTitlefile, document, setDocument, createFile } = prop;
+	const { titleFile, setTitlefile, setDocument, createFile } = prop;
 
 	const hadleFile = (event) => {
 		const fileSelected = event.target.files[0];
@@ -53,7 +53,7 @@ const CreateFile = (prop) => {
 									name="document"
 									// este atributo accept permite definir cuale tipos de archivos puede seleccionar el usuario
 									// estos tipos de formatos se llaman MIME  https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
-									accept="application/pdf, text/plain, application/msword"
+									accept="application/pdf, text/plain, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 									onChange={hadleFile}
 									required
 								/>

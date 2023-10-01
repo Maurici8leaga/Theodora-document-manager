@@ -1,5 +1,15 @@
-export const pdfFileExample = "./src/assets/documents/CV_Mauricio_Oleaga.pdf";
+// mock of files
 
-export const txtFileExample = "./src/assets/documents/Cover_letter.txt";
+export const pdfFileExample = "../../assets/documents/CV_Mauricio_Oleaga.pdf";
 
-export const wordFileExample = "./src/assets/documents/Contract_example.doc";
+export const txtFileExample = "../../assets/documents/Cover_letter.txt";
+
+export const wordFileExample = "../../assets/documents/Contract_example.doc";
+
+// usamo url de cloudinary porque es mas comodo
+
+export const urlWord =
+	"https://res.cloudinary.com/maurici8leaga/raw/upload/v1696127057/Contract_example_k8tmij.doc";
+
+export const urlTxt =
+	"https://res.cloudinary.com/maurici8leaga/raw/upload/v1696127326/Cover_letter_ep8ivi.txt";

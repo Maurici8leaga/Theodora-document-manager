@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 // component
 import CreateFile from "../../molecules/modal/create-file-modal/CreateFile";
@@ -12,7 +12,7 @@ import {
 	deleteDocument,
 	getDocument,
 } from "../../redux-toolkit/reducers/files/files.reducer";
-import { BsPencil, BsTrash3 } from "react-icons/bs";
+import { BsPencil, BsTrash3, BsSearch } from "react-icons/bs";
 import {
 	pdfFileExample,
 	txtFileExample,
@@ -35,6 +35,8 @@ const DocumentManager = () => {
 	const [idFile, setIdFile] = useState("");
 
 	const dispatch = useDispatch();
+
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		// como se quiere que cada vez que inicie este componet carge laa data se coloca esta funcion dentro
@@ -65,18 +67,30 @@ const DocumentManager = () => {
 
 			// creamos este condicional para poder usar mock conn los archivos y asi lo pueda leer
 			let documentPath;
+			let fileType;
 			if (document === "application/pdf") {
 				documentPath = pdfFileExample;
+				fileType = "application/pdf";
 			} else if (document === "application/msword") {
 				documentPath = wordFileExample;
+				fileType = "application/msword";
+			} else if (
+				document ===
+				"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+			) {
+				documentPath = wordFileExample;
+				fileType =
+					"application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 			} else {
 				documentPath = txtFileExample;
+				fileType = "text/plain";
 			}
 
 			const response = await fileService.createFile({
 				id: maxId + 1,
 				title: titleFile,
 				document: documentPath,
+				fileType,
 			});
 
 			dispatch(
@@ -136,7 +150,6 @@ const DocumentManager = () => {
 					<CreateFile
 						titleFile={titleFile}
 						setTitlefile={setTitlefile}
-						document={document}
 						setDocument={setDocument}
 						createFile={createFile}
 					/>
@@ -170,6 +183,13 @@ const DocumentManager = () => {
 												</button>
 												<button
 													type="button"
+													className="btn btn-info d-flex text-center"
+													onClick={() => navigate(`/visualizer/${item.id}`)}
+												>
+													<BsSearch />
+												</button>
+												<button
+													type="button"
 													className="btn btn-danger d-flex"
 													onClick={() => deleteFile(item.id)}
 												>
@@ -190,7 +210,7 @@ const DocumentManager = () => {
 					</div>
 				</div>
 			) : (
-				<Navigate to="/" />
+				navigate("/")
 			)}
 		</>
 	);
