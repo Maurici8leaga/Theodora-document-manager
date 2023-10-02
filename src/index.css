@@ -24,3 +24,9 @@ body {
 	background-color: "#eeeeee";
 	position: fixed;
 }
+
+.bg-custom {
+	height: 100vh;
+	background-color: #bcbfd2;
+	overflow: scroll;
+}

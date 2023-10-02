@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import CreateFile from "../../molecules/modal/create-file-modal/CreateFile";
 import EditFile from "../..//molecules/modal/edit-file-modal/EditFile";
 import TableFiles from "../../molecules/tableFiles/TableFiles";
+import Navbar from "../../molecules/navbar/Navbar";
 // static data
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { fileService } from "../../services/api/files.service";
@@ -13,7 +14,6 @@ import {
 	deleteDocument,
 	getDocument,
 } from "../../redux-toolkit/reducers/files/files.reducer";
-import { BsFillDoorOpenFill } from "react-icons/bs";
 import {
 	pdfFileExample,
 	txtFileExample,
@@ -23,6 +23,7 @@ import {
 import UploadIcon from "../../assets/upload.png";
 // css
 import "../document-manager/DocumentManager.css";
+import "../../index.css";
 
 const DocumentManager = () => {
 	const files = useSelector((state) => state.files.documents);
@@ -133,29 +134,10 @@ const DocumentManager = () => {
 	return (
 		<>
 			{userAuthenticated ? (
-				<div style={{ backgroundColor: "#bcbfd2" }}>
-					<nav className="navbar sticky-top bg-navbar">
-						<div className="container-fluid justify-content space-between">
-							<a className="navbar-brand text-white" href="/document-manager">
-								THEODORA
-							</a>
+				<div className="bg-custom">
+					<Navbar logOut={logOut} />
 
-							<button
-								type="button"
-								className="btn btn-light d-flex align-items-center"
-								onClick={() => logOut()}
-							>
-								Log out
-								<BsFillDoorOpenFill />
-							</button>
-						</div>
-					</nav>
-					<div
-						className="container-md mt-5"
-						style={{
-							height: "100vh",
-						}}
-					>
+					<div className="container-md mt-5 vh-100">
 						<div className="container-custom">
 							<div className="card text-center bg-card">
 								<div className="card-body">

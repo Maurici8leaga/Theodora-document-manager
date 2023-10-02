@@ -1,20 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch, connect } from "react-redux";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
+import Navbar from "../../molecules/navbar/Navbar";
 // static data
+import useLocalStorage from "../../hooks/useLocalStorage";
 import urlPDF from "../../assets/documents/CV_Mauricio_Oleaga.pdf";
 import { urlWord, urlTxt } from "../../services/utils/static.data";
 import { fileService } from "../../services/api/files.service";
 import { getDocumentById } from "../../redux-toolkit/reducers/files/files.reducer";
+// css
+import "../visualizer/VisualizerDocument.css";
+import "../../index.css";
 
-const VisualizerDocument = ({ stateFiles }) => {
+const VisualizerDocument = () => {
+	// const VisualizerDocument = ({ stateFiles }) => {
 	const { idFile } = useParams();
-	// const stateFiles = useSelector((state) => state.files.file);
+	const stateFiles = useSelector((state) => state.files.file);
 
 	console.log(stateFiles, "este es stateFiles de mapState");
 
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const [setStoredUser] = useLocalStorage("token", "get");
+	const [deleteStoredUser] = useLocalStorage("token", "delete");
+	const [userAuthenticated, setUserAuthenticated] = useState(setStoredUser);
 
 	const [uriFile, setUriFile] = useState("");
 	const [fileSelected, setFileSelected] = useState("");
@@ -33,8 +44,6 @@ const VisualizerDocument = ({ stateFiles }) => {
 			setUriFile(urlTxt);
 		}
 	};
-
-	// console.log(stateFiles !== fileSelected, "esto es igual> ");
 
 	useEffect(() => {
 		const fetchFileById = async () => {
@@ -57,8 +66,6 @@ const VisualizerDocument = ({ stateFiles }) => {
 
 	const { fileType, title } = fileSelected || {};
 
-	console.log(fileSelected, "esto es fileSelected");
-
 	const docs = [
 		{
 			uri: uriFile,
@@ -67,18 +74,30 @@ const VisualizerDocument = ({ stateFiles }) => {
 		},
 	];
 
+	const logOut = () => {
+		setUserAuthenticated(deleteStoredUser);
+	};
+
 	return (
-		<div style={{ width: "100vw", height: "100vh" }}>
-			<h1>ESTE ES EL VISUALIZER</h1>
-			<p>este es el id que esta llegando {idFile}</p>
-			{uriFile && uriFile.length > 0 && (
-				<DocViewer
-					documents={docs}
-					pluginRenderers={DocViewerRenderers}
-					style={{ height: "90vh" }}
-				/>
+		<>
+			{userAuthenticated ? (
+				<div className="bg-custom">
+					<Navbar logOut={logOut} />
+
+					{uriFile && uriFile.length > 0 && (
+						<div className="container-Visualizer">
+							<DocViewer
+								documents={docs}
+								pluginRenderers={DocViewerRenderers}
+								style={{ height: "80vh" }}
+							/>
+						</div>
+					)}
+				</div>
+			) : (
+				navigate("/")
 			)}
-		</div>
+		</>
 	);
 };
 

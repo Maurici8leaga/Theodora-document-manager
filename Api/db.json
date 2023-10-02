@@ -8,13 +8,13 @@
     },
     {
       "id": 2,
-      "title": "cover letter",
-      "document": "../../assets/documents/Cover_letter.txt",
-      "fileType": "text/plain"
+      "title": "contract example",
+      "document": "../../assets/documents/Contract_example.doc",
+      "fileType": "application/msword"
     },
     {
       "id": 3,
-      "title": "cover letter",
+      "title": "Cover letter",
       "document": "../../assets/documents/Cover_letter.txt",
       "fileType": "text/plain"
     }
