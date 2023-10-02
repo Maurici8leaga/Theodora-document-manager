@@ -34,39 +34,44 @@ const CreateFile = (prop) => {
 					</div>
 					<div className="modal-body">
 						<form onSubmit={createFile}>
-							<div className="form-floating">
-								<input
-									name="title"
-									type="text"
-									value={titleFile}
-									className="form-control"
-									placeholder="file name"
-									onChange={(event) => setTitlefile(event.target.value)}
-									required
-								/>
-								<label>File name</label>
+							<label className="form-label">File Name</label>
+							<input
+								name="title"
+								type="text"
+								value={titleFile}
+								className="form-control mb-3"
+								placeholder="File name"
+								onChange={(event) => setTitlefile(event.target.value)}
+								required
+							/>
+
+							<label className="form-label">File</label>
+							<input
+								className="form-control"
+								type="file"
+								name="document"
+								// este atributo accept permite definir cuale tipos de archivos puede seleccionar el usuario
+								// estos tipos de formatos se llaman MIME  https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+								accept="application/pdf, text/plain, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+								onChange={hadleFile}
+								required
+							/>
+							<div className="form-text mb-3">
+								<p> You can only choose file of type PDF, TXT or Word </p>
 							</div>
-							<div className="mb-3">
-								<input
-									className="form-control"
-									type="file"
-									name="document"
-									// este atributo accept permite definir cuale tipos de archivos puede seleccionar el usuario
-									// estos tipos de formatos se llaman MIME  https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
-									accept="application/pdf, text/plain, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-									onChange={hadleFile}
-									required
-								/>
-							</div>
+
 							<div className="modal-footer">
 								<button
 									type="button"
-									className="btn btn-secondary"
+									className="btn btn-outline-secondary"
 									data-bs-dismiss="modal"
 								>
 									Cancel
 								</button>
-								<button type="submit" className="btn btn-primary d-flex">
+								<button
+									type="submit"
+									className="btn btn-outline-primary d-flex"
+								>
 									Add
 								</button>
 							</div>

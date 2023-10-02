@@ -14,7 +14,7 @@ export const AppRouter = () => {
 			element: <DocumentManager />,
 		},
 		{
-			path: "/visualizer/:id",
+			path: "/visualizer/:idFile",
 			element: <VisualizerDocument />,
 		},
 	]);

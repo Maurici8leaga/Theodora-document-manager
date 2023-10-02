@@ -5,7 +5,10 @@ import { createSlice } from "@reduxjs/toolkit";
 // con REDUX-TOOLKIT los actions van ahora aqui adentro de los Slices
 // estos actions se repetiran por los modelos que tengas user, carrito etc. En este caso es referente  al user
 
-const initialState = [];
+const initialState = {
+	documents: [],
+	file: {},
+};
 
 const fileSlice = createSlice({
 	name: "files", //este nombre es el que sera colocado en el reducer del store
@@ -14,6 +17,9 @@ const fileSlice = createSlice({
 		// aqui iran los actions que tendra el reducer
 		getDocument: (state, action) => {
 			return { ...state, documents: action.payload };
+		},
+		getDocumentById: (state, action) => {
+			return { ...state, file: action.payload };
 		},
 		addDocument: (state, action) => {
 			state.documents.push(action.payload);
@@ -41,6 +47,11 @@ const fileSlice = createSlice({
 	},
 });
 
-export const { getDocument, addDocument, updateDocument, deleteDocument } =
-	fileSlice.actions; // se debe exportar los actions
+export const {
+	getDocument,
+	getDocumentById,
+	addDocument,
+	updateDocument,
+	deleteDocument,
+} = fileSlice.actions; // se debe exportar los actions
 export default fileSlice.reducer;

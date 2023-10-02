@@ -2,12 +2,19 @@
 	padding-top: 8rem;
 }
 
-.container-form {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-
-	width: 400px;
+.container-custom {
+	width: 700px;
 	height: auto;
 	margin: auto;
+}
+
+.bg-navbar {
+	background-color: var(--primary);
+	color: var(--wite);
+}
+
+.bg-card {
+	border: 1px dashed var(--primary);
+	background-color: #d6cfdc;
+	color: var(--wite);
 }

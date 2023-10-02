@@ -1,27 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { updateDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
 import { fileService } from "../../../services/api/files.service";
 
 const EditFile = (prop) => {
-	const { idFile } = prop;
-
-	const files = useSelector((state) => state.files);
-
+	const { idFile, arrayDocuments } = prop;
 	const [newTitle, setNewTitle] = useState("");
 	const [documentUpdate, setDocumentUpdate] = useState("");
 
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (idFile !== undefined && files.documents) {
-			const fileSelected = files.documents.find((item) => item.id === idFile);
+		if (idFile !== undefined && arrayDocuments) {
+			const fileSelected = arrayDocuments.find((item) => item.id === idFile);
 			if (fileSelected) {
 				setNewTitle(fileSelected.title);
 				setDocumentUpdate(fileSelected);
 			}
 		}
-	}, [idFile, files]);
+	}, [idFile, arrayDocuments]);
 
 	const updateFile = async (event) => {
 		try {
@@ -65,25 +62,26 @@ const EditFile = (prop) => {
 					</div>
 					<div className="modal-body">
 						<form onSubmit={updateFile}>
-							<div className="input-group mb-3">
-								<input
-									name="title-edit"
-									type="text"
-									value={newTitle}
-									className="form-control"
-									placeholder="Title"
-									onChange={(event) => setNewTitle(event.target.value)}
-								/>
-							</div>
+							<label className="form-label">File Name</label>
+
+							<input
+								name="title-edit"
+								type="text"
+								value={newTitle}
+								className="form-control mb-4"
+								placeholder="Title"
+								onChange={(event) => setNewTitle(event.target.value)}
+							/>
+
 							<div className="modal-footer">
 								<button
 									type="button"
-									className="btn btn-secondary"
+									className="btn btn-outline-secondary"
 									data-bs-dismiss="modal"
 								>
 									Close
 								</button>
-								<button type="submit" className="btn btn-primary">
+								<button type="submit" className="btn btn-outline-primary">
 									Save changes
 								</button>
 							</div>

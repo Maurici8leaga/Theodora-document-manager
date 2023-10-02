@@ -2,7 +2,13 @@ import axios from "../axios";
 
 class FileServices {
 	async getFiles() {
-		const response = await axios.get();
+		const response = await axios.get("/");
+		return response;
+	}
+
+	async getFileById(body) {
+		const response = await axios.get(`/${body}`);
+		// para solicitar un elemento del back con solo el id es asi '/:id segun la documentacion del json-server
 		return response;
 	}
 

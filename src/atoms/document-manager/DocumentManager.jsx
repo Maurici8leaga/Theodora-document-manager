@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 // component
 import CreateFile from "../../molecules/modal/create-file-modal/CreateFile";
 import EditFile from "../..//molecules/modal/edit-file-modal/EditFile";
+import TableFiles from "../../molecules/tableFiles/TableFiles";
 // static data
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { fileService } from "../../services/api/files.service";
@@ -12,17 +13,20 @@ import {
 	deleteDocument,
 	getDocument,
 } from "../../redux-toolkit/reducers/files/files.reducer";
-import { BsPencil, BsTrash3, BsSearch } from "react-icons/bs";
+import { BsFillDoorOpenFill } from "react-icons/bs";
 import {
 	pdfFileExample,
 	txtFileExample,
 	wordFileExample,
 } from "../../services/utils/static.data";
+
+import UploadIcon from "../../assets/upload.png";
 // css
 import "../document-manager/DocumentManager.css";
 
 const DocumentManager = () => {
-	const files = useSelector((state) => state.files);
+	const files = useSelector((state) => state.files.documents);
+	// const files = useSelector((state) => state.files);
 	// useSelector es un hook  de react-redux que permite extraer data del state de store
 
 	const [setStoredUser] = useLocalStorage("token", "get");
@@ -59,9 +63,11 @@ const DocumentManager = () => {
 	const postFile = async () => {
 		try {
 			const maxId =
-				files.documents.length > 0
-					? Math.max(...files.documents.map((file) => file.id))
-					: 0;
+				files.length > 0
+					? // files.documents.length > 0
+					  Math.max(...files.map((file) => file.id))
+					: // ? Math.max(...files.documents.map((file) => file.id))
+					  0;
 			// Math.max calcula el mayor elemento del array, en este caso el id, y si no tiene algun se le define 0
 			// se usa "...files." porque para Math.max cuando se quiere calcular el mayor valor de un array se usa asi
 
@@ -120,93 +126,87 @@ const DocumentManager = () => {
 		}
 	};
 
+	const visulizeFile = (id) => {
+		navigate(`/visualizer/${id}`);
+	};
+
 	return (
 		<>
 			{userAuthenticated ? (
-				<div className="container-md text-center">
-					<div className="d-flex flex-row justify-content-evenly mt-5">
-						<h2>THEODORA</h2>
-						<button
-							type="button"
-							className="btn btn-primary"
-							onClick={() => logOut()}
-						>
-							Close Session
-						</button>
-					</div>
+				<div style={{ backgroundColor: "#bcbfd2" }}>
+					<nav className="navbar sticky-top bg-navbar">
+						<div className="container-fluid justify-content space-between">
+							<a className="navbar-brand text-white" href="/document-manager">
+								THEODORA
+							</a>
 
-					<div className="d-flex d-flex flex-row justify-content-center mt-5">
-						<h3 className="h3 mx-5">List of Documents</h3>
-						<button
-							type="button"
-							className="btn btn-primary"
-							data-bs-toggle="modal"
-							data-bs-target="#createModal"
-						>
-							Create a file
-						</button>
-					</div>
+							<button
+								type="button"
+								className="btn btn-light d-flex align-items-center"
+								onClick={() => logOut()}
+							>
+								Log out
+								<BsFillDoorOpenFill />
+							</button>
+						</div>
+					</nav>
+					<div
+						className="container-md mt-5"
+						style={{
+							height: "100vh",
+						}}
+					>
+						<div className="container-custom">
+							<div className="card text-center bg-card">
+								<div className="card-body">
+									<h3 className="card-title">Library</h3>
+									<figure className="text-center">
+										<img
+											src={UploadIcon}
+											alt="upload icon"
+											style={{ width: "110px" }}
+										/>
+									</figure>
+									<p className="card-text">Upload your files here.</p>
+									<button
+										type="button"
+										className="btn btn-outline-primary"
+										data-bs-toggle="modal"
+										data-bs-target="#createModal"
+									>
+										Choose a file from your computer
+									</button>
+								</div>
+							</div>
+							<CreateFile
+								titleFile={titleFile}
+								setTitlefile={setTitlefile}
+								setDocument={setDocument}
+								createFile={createFile}
+							/>
 
-					<CreateFile
-						titleFile={titleFile}
-						setTitlefile={setTitlefile}
-						setDocument={setDocument}
-						createFile={createFile}
-					/>
+							<EditFile idFile={idFile} arrayDocuments={files} />
 
-					<EditFile idFile={idFile} />
-
-					<div className="container text-center mt-5">
-						<table className="table">
-							<thead>
-								<tr>
-									<th scope="col">Number document</th>
-									<th scope="col">Title</th>
-									<th scope="col">settings</th>
-								</tr>
-							</thead>
-							<tbody>
-								{files.documents && files.documents.length > 0 ? (
-									files.documents.map((item, index) => (
-										<tr key={index}>
-											<td>{item.id}</td>
-											<td>{item.title}</td>
-											<td className="d-flex flex-row gap-3 justify-content-center">
-												<button
-													type="button"
-													className="btn btn-warning d-flex text-center"
-													data-bs-toggle="modal"
-													data-bs-target="#editModal"
-													onClick={() => setIdFile(item.id)}
-												>
-													<BsPencil />
-												</button>
-												<button
-													type="button"
-													className="btn btn-info d-flex text-center"
-													onClick={() => navigate(`/visualizer/${item.id}`)}
-												>
-													<BsSearch />
-												</button>
-												<button
-													type="button"
-													className="btn btn-danger d-flex"
-													onClick={() => deleteFile(item.id)}
-												>
-													<BsTrash3 />
-												</button>
-											</td>
-										</tr>
-									))
-								) : (
-									<tr>
-										<td></td>
-										<td>There no are documents yet</td>
-										<td></td>
-									</tr>
-								)}
-							</tbody>
-						</table>
+							<div className="text-center mt-5">
+								<ul className="list-group gap-2">
+									{files && files.length > 0 ? (
+										files.map((item, index) => (
+											<TableFiles
+												key={index}
+												idFile={item.id}
+												title={item.title}
+												fileType={item.fileType}
+												setIdFile={setIdFile}
+												visulizeFile={visulizeFile}
+												deleteFile={deleteFile}
+											/>
+										))
+									) : (
+										<></>
+									)}
+								</ul>
+							</div>
+						</div>
 					</div>
 				</div>
 			) : (
