@@ -2,21 +2,21 @@
   "files": [
     {
       "id": 1,
-      "title": "Curriculum Vitae",
+      "title": "Curriculum",
       "document": "../../assets/documents/CV_Mauricio_Oleaga.pdf",
       "fileType": "application/pdf"
     },
     {
       "id": 2,
-      "title": "contract example",
-      "document": "../../assets/documents/Contract_example.doc",
-      "fileType": "application/msword"
-    },
-    {
-      "id": 3,
       "title": "Cover letter",
       "document": "../../assets/documents/Cover_letter.txt",
       "fileType": "text/plain"
+    },
+    {
+      "id": 3,
+      "title": "Contract example",
+      "document": "../../assets/documents/Contract_example.doc",
+      "fileType": "application/msword"
     }
   ]
 }

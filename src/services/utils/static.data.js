@@ -10,6 +10,3 @@ export const wordFileExample = "../../assets/documents/Contract_example.doc";
 
 export const urlWord =
 	"https://res.cloudinary.com/maurici8leaga/raw/upload/v1696127057/Contract_example_k8tmij.doc";
-
-export const urlTxt =
-	"https://res.cloudinary.com/maurici8leaga/raw/upload/v1696127326/Cover_letter_ep8ivi.txt";
