@@ -105,13 +105,6 @@ const DocumentManager = () => {
 		}
 	};
 
-	const createFile = (event) => {
-		event.preventDefault();
-		postFile();
-		setTitlefile("");
-		setDocument("");
-	};
-
 	const deleteFile = async (id) => {
 		try {
 			await fileService.deleteFile({ id: id });
@@ -160,7 +153,7 @@ const DocumentManager = () => {
 								titleFile={titleFile}
 								setTitlefile={setTitlefile}
 								setDocument={setDocument}
-								createFile={createFile}
+								postFile={postFile}
 							/>
 
 							<EditFile idFile={idFile} arrayDocuments={files} />

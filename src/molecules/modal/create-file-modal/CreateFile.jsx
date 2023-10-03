@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 
 const CreateFile = (prop) => {
-	const { titleFile, setTitlefile, setDocument, createFile } = prop;
+	const { titleFile, setTitlefile, setDocument, postFile } = prop;
+
+	const [file, setFile] = useState("");
 
 	const hadleFile = (event) => {
 		const fileSelected = event.target.files[0];
 		if (fileSelected) {
 			// escogemops solo el type porque con el vamos a simular un archivo
 			setDocument(fileSelected.type);
+			setFile(event.target.value);
 		}
+	};
+
+	const createFile = (event) => {
+		event.preventDefault();
+		postFile();
+		setTitlefile("");
+		setDocument("");
 	};
 
 	return (
@@ -23,7 +33,7 @@ const CreateFile = (prop) => {
 				<div className="modal-content">
 					<div className="modal-header">
 						<h1 className="modal-title fs-5" id="createModalLabel">
-							Create a file
+							New file
 						</h1>
 						<button
 							type="button"
@@ -71,6 +81,9 @@ const CreateFile = (prop) => {
 								<button
 									type="submit"
 									className="btn btn-outline-primary d-flex"
+									data-bs-dismiss={`${
+										titleFile !== "" && file !== "" ? "modal" : null
+									}`}
 								>
 									Add
 								</button>

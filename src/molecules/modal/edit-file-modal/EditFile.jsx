@@ -51,7 +51,7 @@ const EditFile = (prop) => {
 				<div className="modal-content">
 					<div className="modal-header">
 						<h1 className="modal-title fs-5" id="editModalLabel">
-							Edit Document
+							Edit file name
 						</h1>
 						<button
 							type="button"
@@ -81,7 +81,11 @@ const EditFile = (prop) => {
 								>
 									Close
 								</button>
-								<button type="submit" className="btn btn-outline-primary">
+								<button
+									type="submit"
+									className="btn btn-outline-primary"
+									data-bs-dismiss="modal"
+								>
 									Save changes
 								</button>
 							</div>
