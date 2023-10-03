@@ -6,6 +6,7 @@ import CreateFile from "../../molecules/modal/create-file-modal/CreateFile";
 import EditFile from "../..//molecules/modal/edit-file-modal/EditFile";
 import TableFiles from "../../molecules/tableFiles/TableFiles";
 import Navbar from "../../molecules/navbar/Navbar";
+import Login from "../auth/Login";
 // static data
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { fileService } from "../../services/api/files.service";
@@ -26,24 +27,23 @@ import "../document-manager/DocumentManager.css";
 import "../../index.css";
 
 const DocumentManager = () => {
-	const files = useSelector((state) => state.files.documents);
-	// const files = useSelector((state) => state.files);
-	// useSelector es un hook  de react-redux que permite extraer data del state de store
-
-	const [setStoredUser] = useLocalStorage("token", "get");
-	const [deleteStoredUser] = useLocalStorage("token", "delete");
-	const [userAuthenticated, setUserAuthenticated] = useState(setStoredUser);
-
-	const [titleFile, setTitlefile] = useState("");
-	const [document, setDocument] = useState("");
-
-	const [idFile, setIdFile] = useState("");
-
 	const dispatch = useDispatch();
-
 	const navigate = useNavigate();
 
+	const files = useSelector((state) => state.files.documents);
+	// useSelector es un hook  de react-redux que permite extraer data del state de store
+
+	// state for authentication
+	const [tokeAuthentication] = useLocalStorage("token", "get");
+	const [titleFile, setTitlefile] = useState("");
+	const [document, setDocument] = useState("");
+	const [idFile, setIdFile] = useState("");
+
 	useEffect(() => {
+		if (!tokeAuthentication) {
+			// usamos navigate en el useEffect paara que cuando cargue este componente si el user no esta autenticado redireccione al inicio
+			navigate("/");
+		}
 		// como se quiere que cada vez que inicie este componet carge laa data se coloca esta funcion dentro
 		const fetchFiles = async () => {
 			// toda llamada a un api es async
@@ -55,11 +55,7 @@ const DocumentManager = () => {
 			}
 		};
 		fetchFiles();
-	}, [dispatch]);
-
-	const logOut = () => {
-		setUserAuthenticated(deleteStoredUser);
-	};
+	}, [dispatch, navigate, tokeAuthentication]);
 
 	const postFile = async () => {
 		try {
@@ -133,9 +129,9 @@ const DocumentManager = () => {
 
 	return (
 		<>
-			{userAuthenticated ? (
+			{tokeAuthentication ? (
 				<div className="bg-custom">
-					<Navbar logOut={logOut} />
+					<Navbar />
 
 					<div className="container-md mt-5 vh-100">
 						<div className="container-custom">
@@ -192,7 +188,7 @@ const DocumentManager = () => {
 					</div>
 				</div>
 			) : (
-				navigate("/")
+				<Login />
 			)}
 		</>
 	);

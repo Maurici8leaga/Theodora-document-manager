@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+// static data
 import useLocalStorage from "../../hooks/useLocalStorage";
+// css
 import "../auth/Login.css";
 
 const Login = () => {
