@@ -9,24 +9,35 @@ const EditFile = (prop) => {
 
 	const [newTitle, setNewTitle] = useState("");
 	const [documentUpdate, setDocumentUpdate] = useState("");
+	const [error, setError] = useState("");
 
 	const updateFile = async (event) => {
 		try {
 			event.preventDefault();
 
-			const response = await fileService.updateFile({
-				id: documentUpdate.id,
-				title: newTitle,
-				document: documentUpdate.document,
-			});
+			if (newTitle.length > 0) {
+				const response = await fileService.updateFile({
+					id: documentUpdate.id,
+					title: newTitle,
+					document: documentUpdate.document,
+				});
 
-			dispatch(
-				// aqui se usa el action de update para actualizar el document
-				updateDocument(response.data)
-			);
+				dispatch(
+					// aqui se usa el action de update para actualizar el document
+					updateDocument(response.data)
+				);
+				setError(null);
+			} else {
+				setError("Title can not be empty");
+			}
 		} catch (error) {
 			console.log(error.stack);
 		}
+	};
+
+	const handleClose = () => {
+		setNewTitle(newTitle);
+		setError(null);
 	};
 
 	useEffect(() => {
@@ -46,6 +57,7 @@ const EditFile = (prop) => {
 			tabIndex="-1"
 			aria-labelledby="editModalLabel"
 			aria-hidden="true"
+			onClick={handleClose}
 		>
 			<div className="modal-dialog modal-dialog-centered">
 				<div className="modal-content">
@@ -58,6 +70,7 @@ const EditFile = (prop) => {
 							className="btn-close"
 							data-bs-dismiss="modal"
 							aria-label="Close"
+							onClick={handleClose}
 						></button>
 					</div>
 					<div className="modal-body">
@@ -73,18 +86,25 @@ const EditFile = (prop) => {
 								onChange={(event) => setNewTitle(event.target.value)}
 							/>
 
+							{error ? (
+								<label className="form-label text-danger">{error}</label>
+							) : (
+								<></>
+							)}
+
 							<div className="modal-footer">
 								<button
 									type="button"
 									className="btn btn-outline-secondary"
 									data-bs-dismiss="modal"
+									onClick={handleClose}
 								>
 									Close
 								</button>
 								<button
 									type="submit"
 									className="btn btn-outline-primary"
-									data-bs-dismiss="modal"
+									data-bs-dismiss={`${newTitle.length > 0 ? "modal" : null}`}
 								>
 									Save changes
 								</button>
