@@ -9,18 +9,8 @@ import Navbar from "../../molecules/navbar/Navbar";
 import Login from "../auth/Login";
 // static data
 import useLocalStorage from "../../hooks/useLocalStorage";
-import { fileService } from "../../services/api/files.service";
-import {
-	addDocument,
-	deleteDocument,
-	getDocument,
-} from "../../redux-toolkit/reducers/files/files.reducer";
-import {
-	pdfFileExample,
-	txtFileExample,
-	wordFileExample,
-} from "../../services/utils/static.data";
-
+import { fileService } from "../../services/api/files.service"; // se podra eliminar
+import { getDocument } from "../../redux-toolkit/reducers/files/files.reducer"; // se podra eliminar
 import UploadIcon from "../../assets/upload.png";
 // css
 import "../document-manager/DocumentManager.css";
@@ -36,7 +26,6 @@ const DocumentManager = () => {
 	// state for authentication
 	const [tokeAuthentication] = useLocalStorage("token", "get");
 	const [titleFile, setTitlefile] = useState("");
-	const [document, setDocument] = useState("");
 	const [idFile, setIdFile] = useState("");
 
 	useEffect(() => {
@@ -44,7 +33,7 @@ const DocumentManager = () => {
 			// usamos navigate en el useEffect paara que cuando cargue este componente si el user no esta autenticado redireccione al inicio
 			navigate("/");
 		}
-		// como se quiere que cada vez que inicie este componet carge laa data se coloca esta funcion dentro
+		// como se quiere que cada vez que inicie este component carge la data se coloca esta funcion dentro
 		const fetchFiles = async () => {
 			// toda llamada a un api es async
 			try {
@@ -56,69 +45,6 @@ const DocumentManager = () => {
 		};
 		fetchFiles();
 	}, [dispatch, navigate, tokeAuthentication]);
-
-	const postFile = async () => {
-		try {
-			const maxId =
-				files.length > 0
-					? // files.documents.length > 0
-					  Math.max(...files.map((file) => file.id))
-					: // ? Math.max(...files.documents.map((file) => file.id))
-					  0;
-			// Math.max calcula el mayor elemento del array, en este caso el id, y si no tiene algun se le define 0
-			// se usa "...files." porque para Math.max cuando se quiere calcular el mayor valor de un array se usa asi
-
-			// creamos este condicional para poder usar mock conn los archivos y asi lo pueda leer
-			let documentPath;
-			let fileType;
-			if (document === "application/pdf") {
-				documentPath = pdfFileExample;
-				fileType = "application/pdf";
-			} else if (document === "application/msword") {
-				documentPath = wordFileExample;
-				fileType = "application/msword";
-			} else if (
-				document ===
-				"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-			) {
-				documentPath = wordFileExample;
-				fileType =
-					"application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-			} else {
-				documentPath = txtFileExample;
-				fileType = "text/plain";
-			}
-
-			const response = await fileService.createFile({
-				id: maxId + 1,
-				title: titleFile,
-				document: documentPath,
-				fileType,
-			});
-
-			dispatch(
-				// aqui se usa el actions para crear un nuevo file
-				addDocument(response.data)
-			);
-		} catch (error) {
-			console.log(error.stack);
-		}
-	};
-
-	const deleteFile = async (id) => {
-		try {
-			await fileService.deleteFile({ id: id });
-
-			dispatch(deleteDocument({ id: id }));
-			// en este se pasa solo id porque el reducer esta esperando el id del document
-		} catch (error) {
-			console.log(error.stack);
-		}
-	};
-
-	const visulizeFile = (id) => {
-		navigate(`/visualizer/${id}`);
-	};
 
 	return (
 		<>
@@ -152,8 +78,7 @@ const DocumentManager = () => {
 							<CreateFile
 								titleFile={titleFile}
 								setTitlefile={setTitlefile}
-								setDocument={setDocument}
-								postFile={postFile}
+								arrayFiles={files}
 							/>
 
 							<EditFile idFile={idFile} arrayDocuments={files} />
@@ -168,8 +93,6 @@ const DocumentManager = () => {
 												title={item.title}
 												fileType={item.fileType}
 												setIdFile={setIdFile}
-												visulizeFile={visulizeFile}
-												deleteFile={deleteFile}
 											/>
 										))
 									) : (

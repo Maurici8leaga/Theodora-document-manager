@@ -1,11 +1,19 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+// static data
+import { fileService } from "../../../services/api/files.service";
+import { addDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
+import { UtilsService } from "../../../services/utils/utils.service";
 
 const CreateFile = (prop) => {
-	const { titleFile, setTitlefile, setDocument, postFile } = prop;
+	const { titleFile, setTitlefile, arrayFiles } = prop;
+
+	const dispatch = useDispatch();
 
 	const [file, setFile] = useState("");
+	const [document, setDocument] = useState("");
 
-	const hadleFile = (event) => {
+	const onChangeFile = (event) => {
 		const fileSelected = event.target.files[0];
 		if (fileSelected) {
 			// escogemops solo el type porque con el vamos a simular un archivo
@@ -14,11 +22,35 @@ const CreateFile = (prop) => {
 		}
 	};
 
-	const createFile = (event) => {
-		event.preventDefault();
-		postFile();
-		setTitlefile("");
-		setDocument("");
+	const createFile = async (event) => {
+		try {
+			event.preventDefault();
+
+			// para calculare el maximo id del array de files
+			const maxId = UtilsService.maxId(arrayFiles);
+
+			const { documentPath, fileType } =
+				UtilsService.setDocumentByType(document);
+			// console.log(documentType, "esto nos trae documentType");
+
+			const { data } = await fileService.createFile({
+				id: maxId + 1,
+				title: titleFile,
+				document: documentPath,
+				fileType,
+			});
+
+			dispatch(
+				// aqui se usa el actions para crear un nuevo file
+				addDocument(data)
+			);
+
+			setTitlefile("");
+			setDocument("");
+			setFile("");
+		} catch (error) {
+			console.log(error.stack);
+		}
 	};
 
 	return (
@@ -63,7 +95,7 @@ const CreateFile = (prop) => {
 								// este atributo accept permite definir cuale tipos de archivos puede seleccionar el usuario
 								// estos tipos de formatos se llaman MIME  https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 								accept="application/pdf, text/plain, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-								onChange={hadleFile}
+								onChange={onChangeFile}
 								required
 							/>
 							<div className="form-text mb-3">

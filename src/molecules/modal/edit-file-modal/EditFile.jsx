@@ -5,20 +5,10 @@ import { fileService } from "../../../services/api/files.service";
 
 const EditFile = (prop) => {
 	const { idFile, arrayDocuments } = prop;
-	const [newTitle, setNewTitle] = useState("");
-	const [documentUpdate, setDocumentUpdate] = useState("");
-
 	const dispatch = useDispatch();
 
-	useEffect(() => {
-		if (idFile !== undefined && arrayDocuments) {
-			const fileSelected = arrayDocuments.find((item) => item.id === idFile);
-			if (fileSelected) {
-				setNewTitle(fileSelected.title);
-				setDocumentUpdate(fileSelected);
-			}
-		}
-	}, [idFile, arrayDocuments]);
+	const [newTitle, setNewTitle] = useState("");
+	const [documentUpdate, setDocumentUpdate] = useState("");
 
 	const updateFile = async (event) => {
 		try {
@@ -38,6 +28,16 @@ const EditFile = (prop) => {
 			console.log(error.stack);
 		}
 	};
+
+	useEffect(() => {
+		if (idFile !== undefined && arrayDocuments) {
+			const fileSelected = arrayDocuments.find((item) => item.id === idFile);
+			if (fileSelected) {
+				setNewTitle(fileSelected.title);
+				setDocumentUpdate(fileSelected);
+			}
+		}
+	}, [idFile, arrayDocuments]);
 
 	return (
 		<div

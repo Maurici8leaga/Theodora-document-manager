@@ -1,8 +1,32 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+// static data
+import { fileService } from "../../services/api/files.service";
+import { deleteDocument } from "../../redux-toolkit/reducers/files/files.reducer";
 import { BsPencil, BsTrash3, BsSearch } from "react-icons/bs";
 
 const TableFiles = (prop) => {
-	const { idFile, title, fileType, setIdFile, visulizeFile, deleteFile } = prop;
+	const { idFile, title, fileType, setIdFile } = prop;
+
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const watchFile = (id) => {
+		navigate(`/visualizer/${id}`);
+	};
+
+	const deleteFile = async (idFile) => {
+		try {
+			await fileService.deleteFile({ id: idFile });
+
+			dispatch(deleteDocument({ id: idFile }));
+			// en este se pasa solo id porque el reducer esta esperando el id del document
+		} catch (error) {
+			console.log(error.stack);
+		}
+	};
+
 	return (
 		<>
 			<li className="list-group-item d-flex justify-content-between align-items-center">
@@ -22,7 +46,7 @@ const TableFiles = (prop) => {
 					<button
 						type="button"
 						className="btn btn-outline-info d-flex text-center"
-						onClick={() => visulizeFile(idFile)}
+						onClick={() => watchFile(idFile)}
 					>
 						<BsSearch />
 					</button>
