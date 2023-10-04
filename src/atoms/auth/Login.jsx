@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// static data
 import useLocalStorage from "../../hooks/useLocalStorage";
-// css
 import "../auth/Login.css";
 
 const Login = () => {
 	const navigate = useNavigate();
 
-	// states
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [setStoredUser] = useLocalStorage("token", "set");

@@ -1,7 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-// static data
 import { fileService } from "../../services/api/files.service";
 import { deleteDocument } from "../../redux-toolkit/reducers/files/files.reducer";
 import { BsPencil, BsTrash3, BsSearch } from "react-icons/bs";
@@ -21,7 +20,6 @@ const TableFiles = (prop) => {
 			await fileService.deleteFile({ id: idFile });
 
 			dispatch(deleteDocument({ id: idFile }));
-			// en este se pasa solo id porque el reducer esta esperando el id del document
 		} catch (error) {
 			console.log(error.stack);
 		}

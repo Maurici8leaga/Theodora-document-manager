@@ -22,7 +22,11 @@ To run the API you will have to open another terminal in your code editor, then 
     npx json-server -p 3500 -w Api/db.json
 ```
 
-The number of port is up to, but you need to make sure that the port is other than port 3000. After that, this comand will run a fake API with json-server. The fake data will saved in the db.json file that is in the Api folder at the beginning of the project.
+The number of port is up to, but you need to make sure that the port is other than port 3000. After that, this comand will run a fake API with json-server in the URL http://localhost:3500/files . The fake data will saved in the db.json file that is in the Api folder at the beginning of the project.
+
+### UX
+
+Once the previous commands have been executed you will be able to use Theodora Document Manager, to start you can log in with any email and password you want. After that, you will see the Manager Document that will allow you to create, edit or delete a file, you will also be able to view the file you upload in detail, which will take you to the Viewer document where you can view it in details.
 
 ## About
 

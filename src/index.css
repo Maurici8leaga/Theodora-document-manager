@@ -3,7 +3,7 @@
 :root {
 	--white: #ffffff;
 	--primary: #331254;
-	--secundary: #222c6b;
+	--secundary: #bcbfd2;
 }
 
 * {
@@ -27,6 +27,6 @@ body {
 
 .bg-custom {
 	height: 100vh;
-	background-color: #bcbfd2;
+	background-color: var(--secundary);
 	overflow: scroll;
 }

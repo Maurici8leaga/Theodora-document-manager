@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-// static data
+import { UtilsService } from "../../../services/utils/utils.service";
 import { fileService } from "../../../services/api/files.service";
 import { addDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
-import { UtilsService } from "../../../services/utils/utils.service";
 
 const CreateFile = (prop) => {
 	const { titleFile, setTitlefile, arrayFiles } = prop;
@@ -16,7 +15,6 @@ const CreateFile = (prop) => {
 	const onChangeFile = (event) => {
 		const fileSelected = event.target.files[0];
 		if (fileSelected) {
-			// escogemops solo el type porque con el vamos a simular un archivo
 			setDocument(fileSelected.type);
 			setFile(event.target.value);
 		}
@@ -26,12 +24,12 @@ const CreateFile = (prop) => {
 		try {
 			event.preventDefault();
 
-			// para calculare el maximo id del array de files
+			// function to calculate the maximum number of identifiers in the db
 			const maxId = UtilsService.maxId(arrayFiles);
 
+			// function to filter the document types and returns the static document defined for each one
 			const { documentPath, fileType } =
 				UtilsService.setDocumentByType(document);
-			// console.log(documentType, "esto nos trae documentType");
 
 			const { data } = await fileService.createFile({
 				id: maxId + 1,
@@ -40,10 +38,7 @@ const CreateFile = (prop) => {
 				fileType,
 			});
 
-			dispatch(
-				// aqui se usa el actions para crear un nuevo file
-				addDocument(data)
-			);
+			dispatch(addDocument(data));
 
 			setTitlefile("");
 			setDocument("");
@@ -92,8 +87,6 @@ const CreateFile = (prop) => {
 								className="form-control"
 								type="file"
 								name="document"
-								// este atributo accept permite definir cuale tipos de archivos puede seleccionar el usuario
-								// estos tipos de formatos se llaman MIME  https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 								accept="application/pdf, text/plain, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 								onChange={onChangeFile}
 								required

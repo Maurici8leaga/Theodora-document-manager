@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { updateDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
 import { fileService } from "../../../services/api/files.service";
+import { updateDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
 
 const EditFile = (prop) => {
 	const { idFile, arrayDocuments } = prop;
@@ -22,10 +22,8 @@ const EditFile = (prop) => {
 					document: documentUpdate.document,
 				});
 
-				dispatch(
-					// aqui se usa el action de update para actualizar el document
-					updateDocument(response.data)
-				);
+				dispatch(updateDocument(response.data));
+
 				setError(null);
 			} else {
 				setError("Title can not be empty");
