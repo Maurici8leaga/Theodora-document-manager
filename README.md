@@ -1,12 +1,13 @@
 # Theodora Document Manager
 
-It is a page in which it consists of managing documents, where the user can; create, update, delete and view PDF, TXT or Word documents. This page is intended to meet the requirements requested by the Theodora company to apply for a job as a frontend developer.
+It is a page in which it consists of managing documents, where the user can; create, update, delete and view PDF, TXT or Word documents. This page is intended to meet the requirements requested by the Theodora company to apply for a job as a frontend developer, in short it is only for development purposes.
 
 ### Get Started
 
 The first thing to do is open the terminal of your code editor of your choice and once there you will have to run following comand:
 
 ```sh
+   yarn install
    yarn run start
 ```
 
