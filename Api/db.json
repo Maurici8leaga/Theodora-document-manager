@@ -2,7 +2,7 @@
   "files": [
     {
       "id": 1,
-      "title": "cv",
+      "title": "Curriculum vitae",
       "document": "../../assets/documents/CV_Mauricio_Oleaga.pdf",
       "fileType": "application/pdf"
     },
@@ -14,9 +14,9 @@
     },
     {
       "id": 3,
-      "title": "contract",
-      "document": "../../assets/documents/CV_Mauricio_Oleaga.pdf",
-      "fileType": "application/pdf"
+      "title": "Contract",
+      "document": "../../assets/documents/Contract_example.doc",
+      "fileType": "application/msword"
     }
   ]
 }
