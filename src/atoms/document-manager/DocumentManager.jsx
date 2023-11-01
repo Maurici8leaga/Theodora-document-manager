@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 // component
 import CreateFile from "../../molecules/modal/create-file-modal/CreateFile";
 import EditFile from "../..//molecules/modal/edit-file-modal/EditFile";
+import DeleteFile from "../../molecules/modal/delete-file/DeleteFile";
 import TableFiles from "../../molecules/tableFiles/TableFiles";
 import Navbar from "../../molecules/navbar/Navbar";
 import Login from "../auth/Login";
@@ -82,6 +83,8 @@ const DocumentManager = () => {
 							/>
 
 							<EditFile idFile={idFile} arrayDocuments={files} />
+
+							<DeleteFile idFile={idFile} arrayDocuments={files} />
 
 							<div className="text-center mt-5">
 								<ul className="list-group gap-2">
