@@ -13,3 +13,7 @@ export const urlWord =
 
 export const folderImg =
 	"https://www.iconpacks.net/icons/2/free-folder-icon-1486-thumb.png";
+
+export const userNotAuthorized = "Invalid credentials";
+
+export const fieldEmpty = "Error, the fields must not be empty";

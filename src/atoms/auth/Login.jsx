@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // static data
 import useLocalStorage from "../../hooks/useLocalStorage";
+import {
+	userNotAuthorized,
+	fieldEmpty,
+} from "../../services/utils/static.data";
 // css
 import "../auth/Login.css";
 
@@ -9,16 +13,34 @@ const Login = () => {
 	const navigate = useNavigate();
 
 	// states
-	const [email, setEmail] = useState("");
+	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [setStoredUser] = useLocalStorage("token", "set");
+	const [error, setError] = useState(false);
+	const [errorMsg, setErrorMsg] = useState("");
 
 	const loginUser = (event) => {
 		event.preventDefault();
-		setStoredUser(email);
-		setEmail("");
-		setPassword("");
-		navigate("/document-manager");
+
+		if (username === "" || password === "") {
+			setError(true);
+			setErrorMsg(fieldEmpty);
+			setUsername("");
+			setPassword("");
+		} else if (username !== "admin" || password !== "admin12345") {
+			setError(true);
+			setErrorMsg(userNotAuthorized);
+			setUsername("");
+			setPassword("");
+		} else {
+			const tokenInbound =
+				"r$?ykt06[RhFUm2RPhja6pwPCWZBxgya}qm;]vH/z#4cRW8BwhJT7eAk)YYX[Uutv0hNMC{GpDjHrgS!b=N9tuFJ?7FvvdN(+4f+";
+
+			setStoredUser(tokenInbound);
+			setUsername("");
+			setPassword("");
+			navigate("/document-manager");
+		}
 	};
 
 	return (
@@ -34,16 +56,22 @@ const Login = () => {
 							className="container d-flex flex flex-column pt-3"
 							onSubmit={loginUser}
 						>
+							<div
+								className="alert alert-danger"
+								role="alert"
+								style={{ display: error ? "block" : "none" }}
+							>
+								{errorMsg}
+							</div>
 							<div className="mb-3">
 								<input
-									id="email"
-									name="email"
-									type="email"
-									value={email}
+									id="username"
+									name="username"
+									type="text"
+									value={username}
 									className="form-control"
-									placeholder="Email address"
-									onChange={(event) => setEmail(event.target.value)}
-									required
+									placeholder="Username"
+									onChange={(event) => setUsername(event.target.value)}
 								/>
 							</div>
 							<div className="mb-3">
@@ -55,7 +83,6 @@ const Login = () => {
 									className="form-control"
 									placeholder="Password"
 									onChange={(event) => setPassword(event.target.value)}
-									required
 								/>
 							</div>
 							<button type="submit" className="btn btn-primary">
