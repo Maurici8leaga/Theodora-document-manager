@@ -64,10 +64,17 @@ const VisualizerDocument = () => {
 				<div className="bg-custom">
 					<Navbar />
 					<div className="container-Visualizer">
+						<button
+							type="button"
+							className="btn btn-outline-secondary my-3"
+							onClick={() => navigate("/document-manager")}
+						>
+							Go back
+						</button>
 						<DocViewer
 							documents={file}
 							pluginRenderers={DocViewerRenderers}
-							style={{ height: "80vh" }}
+							style={{ height: "90vh" }}
 						/>
 					</div>
 				</div>
