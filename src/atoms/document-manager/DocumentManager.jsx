@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-// component
 import CreateFile from "../../molecules/modal/create-file-modal/CreateFile";
 import EditFile from "../..//molecules/modal/edit-file-modal/EditFile";
 import DeleteFile from "../../molecules/modal/delete-file/DeleteFile";
 import TableFiles from "../../molecules/tableFiles/TableFiles";
 import Navbar from "../../molecules/navbar/Navbar";
 import Login from "../auth/Login";
-// static data
 import useLocalStorage from "../../hooks/useLocalStorage";
-import { fileService } from "../../services/api/files.service"; // se podra eliminar
-import { getDocument } from "../../redux-toolkit/reducers/files/files.reducer"; // se podra eliminar
+import { fileService } from "../../services/api/files.service";
+import { getDocument } from "../../redux-toolkit/reducers/files/files.reducer";
 import UploadIcon from "../../assets/upload.png";
-// css
 import "../document-manager/DocumentManager.css";
 import "../../index.css";
 
@@ -22,23 +19,19 @@ const DocumentManager = () => {
 	const navigate = useNavigate();
 
 	const files = useSelector((state) => state.files.documents);
-	// useSelector es un hook  de react-redux que permite extraer data del state de store
 
-	// state for authentication
 	const [tokeAuthentication] = useLocalStorage("token", "get");
 	const [titleFile, setTitlefile] = useState("");
 	const [idFile, setIdFile] = useState("");
 
 	useEffect(() => {
 		if (!tokeAuthentication) {
-			// usamos navigate en el useEffect paara que cuando cargue este componente si el user no esta autenticado redireccione al inicio
 			navigate("/");
 		}
-		// como se quiere que cada vez que inicie este component carge la data se coloca esta funcion dentro
+
 		const fetchFiles = async () => {
-			// toda llamada a un api es async
 			try {
-				const response = await fileService.getFiles(); //request al API
+				const response = await fileService.getFiles();
 				dispatch(getDocument(response.data));
 			} catch (error) {
 				console.log(error.stack);

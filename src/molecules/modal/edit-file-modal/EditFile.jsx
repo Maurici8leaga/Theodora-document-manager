@@ -22,10 +22,7 @@ const EditFile = (prop) => {
 					document: documentUpdate.document,
 				});
 
-				dispatch(
-					// aqui se usa el action de update para actualizar el document
-					updateDocument(response.data)
-				);
+				dispatch(updateDocument(response.data));
 				setError(null);
 			} else {
 				setError("Title can not be empty");

@@ -1,18 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// static data
 import useLocalStorage from "../../hooks/useLocalStorage";
 import {
 	userNotAuthorized,
 	fieldEmpty,
 } from "../../services/utils/static.data";
-// css
 import "../auth/Login.css";
 
 const Login = () => {
 	const navigate = useNavigate();
 
-	// states
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [setStoredUser] = useLocalStorage("token", "set");

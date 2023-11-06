@@ -1,16 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-// static data
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { BsFillDoorOpenFill } from "react-icons/bs";
 
 const Navbar = () => {
 	const navigate = useNavigate();
 
-	const [deleteStoredUser] = useLocalStorage("token", "delete"); //no vaa
+	const [deleteStoredUser] = useLocalStorage("token", "delete");
 
 	const logOut = () => {
-		deleteStoredUser(); // aplicas el hook para eliminar el token
+		deleteStoredUser();
 		navigate("/");
 	};
 

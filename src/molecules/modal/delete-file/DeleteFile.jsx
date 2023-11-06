@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-// static data
 import { fileService } from "../../../services/api/files.service";
 import { deleteDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
 import { folderImg } from "../../../services/utils/static.data";
@@ -18,7 +17,6 @@ const DeleteFile = (prop) => {
 			await fileService.deleteFile({ id: idFile });
 
 			dispatch(deleteDocument({ id: idFile }));
-			// en este se pasa solo id porque el reducer esta esperando el id del document
 			setTitle("");
 			setTypeFile("");
 		} catch (error) {
