@@ -1,4 +1,4 @@
-// mock of files
+// Mock of files
 
 export const pdfFileExample = "../../assets/documents/CV_Mauricio_Oleaga.pdf";
 

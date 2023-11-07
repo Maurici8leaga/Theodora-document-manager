@@ -26,6 +26,7 @@ const CreateFile = (prop) => {
 
 			const maxId = UtilsService.maxId(arrayFiles);
 
+			// function to filter the document types and returns the static document defined for each one
 			const { documentPath, fileType } =
 				UtilsService.setDocumentByType(document);
 

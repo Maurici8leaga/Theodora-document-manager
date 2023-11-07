@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import Navbar from "../../molecules/navbar/Navbar";
-import useLocalStorage from "../../hooks/useLocalStorage";
-import { urlWord } from "../../services/utils/static.data";
-import { fileService } from "../../services/api/files.service";
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import Login from "../auth/Login";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import { fileService } from "../../services/api/files.service";
+import { urlWord } from "../../services/utils/static.data";
 import "../visualizer/VisualizerDocument.css";
 import "../../index.css";
 
@@ -26,6 +26,7 @@ const VisualizerDocument = () => {
 		const fetchFileById = async () => {
 			try {
 				const idnum = parseInt(idFile);
+
 				const { data } = await fileService.getFileById(idnum);
 
 				const uri =
@@ -40,6 +41,7 @@ const VisualizerDocument = () => {
 						fileName: data.title,
 					},
 				];
+
 				setFile(docs);
 			} catch (error) {
 				console.log(error.stack);
