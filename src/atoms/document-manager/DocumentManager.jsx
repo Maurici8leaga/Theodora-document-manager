@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import Navbar from "../../molecules/navbar/Navbar";
 import CreateFile from "../../molecules/modal/create-file-modal/CreateFile";
 import EditFile from "../..//molecules/modal/edit-file-modal/EditFile";
+import DeleteFile from "../../molecules/modal/delete-file/DeleteFile";
 import TableFiles from "../../molecules/tableFiles/TableFiles";
+import Navbar from "../../molecules/navbar/Navbar";
 import Login from "../auth/Login";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { fileService } from "../../services/api/files.service";
@@ -75,6 +76,8 @@ const DocumentManager = () => {
 							/>
 
 							<EditFile idFile={idFile} arrayDocuments={files} />
+
+							<DeleteFile idFile={idFile} arrayDocuments={files} />
 
 							<div className="text-center mt-5">
 								<ul className="list-group gap-2">

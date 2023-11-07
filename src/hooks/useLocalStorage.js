@@ -1,4 +1,5 @@
-// Its a custom hook for localStorage
+// custom HOOKs
+
 const useLocalStorage = (key, type) => {
 	try {
 		if (type === "get") {

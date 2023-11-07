@@ -23,7 +23,6 @@ const EditFile = (prop) => {
 				});
 
 				dispatch(updateDocument(response.data));
-
 				setError(null);
 			} else {
 				setError("Title can not be empty");

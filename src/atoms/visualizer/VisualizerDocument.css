@@ -1,6 +1,6 @@
 .container-Visualizer {
 	width: 900px;
-	height: auto;
+	height: 100vh;
 	margin: auto;
-	margin-top: 5rem;
+	margin-top: 1rem;
 }

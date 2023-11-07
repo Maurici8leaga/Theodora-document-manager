@@ -15,6 +15,7 @@ const VisualizerDocument = () => {
 	const navigate = useNavigate();
 
 	const [tokeAuthentication] = useLocalStorage("token", "get");
+
 	const [file, setFile] = useState([]);
 
 	useEffect(() => {
@@ -28,7 +29,6 @@ const VisualizerDocument = () => {
 
 				const { data } = await fileService.getFileById(idnum);
 
-				// This conditional is created to avoid DocViewer errors with word type files
 				const uri =
 					data.fileType !== "application/msword"
 						? `${process.env.PUBLIC_URL}${data.document}`
@@ -57,10 +57,17 @@ const VisualizerDocument = () => {
 				<div className="bg-custom">
 					<Navbar />
 					<div className="container-Visualizer">
+						<button
+							type="button"
+							className="btn btn-outline-secondary my-3"
+							onClick={() => navigate("/document-manager")}
+						>
+							Go back
+						</button>
 						<DocViewer
 							documents={file}
 							pluginRenderers={DocViewerRenderers}
-							style={{ height: "80vh" }}
+							style={{ height: "90vh" }}
 						/>
 					</div>
 				</div>

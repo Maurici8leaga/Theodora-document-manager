@@ -1,28 +1,15 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fileService } from "../../services/api/files.service";
-import { deleteDocument } from "../../redux-toolkit/reducers/files/files.reducer";
+// static data
 import { BsPencil, BsTrash3, BsSearch } from "react-icons/bs";
 
 const TableFiles = (prop) => {
 	const { idFile, title, fileType, setIdFile } = prop;
 
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const watchFile = (id) => {
 		navigate(`/visualizer/${id}`);
-	};
-
-	const deleteFile = async (idFile) => {
-		try {
-			await fileService.deleteFile({ id: idFile });
-
-			dispatch(deleteDocument({ id: idFile }));
-		} catch (error) {
-			console.log(error.stack);
-		}
 	};
 
 	return (
@@ -52,7 +39,9 @@ const TableFiles = (prop) => {
 					<button
 						type="button"
 						className="btn btn-outline-danger d-flex"
-						onClick={() => deleteFile(idFile)}
+						data-bs-toggle="modal"
+						data-bs-target="#deleteModal"
+						onClick={() => setIdFile(idFile)}
 					>
 						<BsTrash3 />
 					</button>

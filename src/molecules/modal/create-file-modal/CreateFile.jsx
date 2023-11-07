@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { UtilsService } from "../../../services/utils/utils.service";
 import { fileService } from "../../../services/api/files.service";
 import { addDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
+import { UtilsService } from "../../../services/utils/utils.service";
 
 const CreateFile = (prop) => {
 	const { titleFile, setTitlefile, arrayFiles } = prop;
@@ -24,7 +24,6 @@ const CreateFile = (prop) => {
 		try {
 			event.preventDefault();
 
-			// function to calculate the maximum number of identifiers in the db
 			const maxId = UtilsService.maxId(arrayFiles);
 
 			// function to filter the document types and returns the static document defined for each one

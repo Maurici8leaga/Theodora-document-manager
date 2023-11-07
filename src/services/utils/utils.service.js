@@ -4,7 +4,6 @@ export class UtilsService {
 	// function to calculate the maximum number of identifiers in the db
 	static maxId(files) {
 		const id = files.length > 0 ? Math.max(...files.map((file) => file.id)) : 0;
-
 		return id;
 	}
 
