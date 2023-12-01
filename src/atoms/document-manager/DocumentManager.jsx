@@ -76,11 +76,7 @@ const DocumentManager = () => {
 									</button>
 								</div>
 							</div>
-							<CreateFile
-								titleFile={titleFile}
-								setTitlefile={setTitlefile}
-								arrayFiles={files}
-							/>
+							<CreateFile titleFile={titleFile} setTitlefile={setTitlefile} />
 
 							<EditFile idFile={idFile} arrayDocuments={files} />
 

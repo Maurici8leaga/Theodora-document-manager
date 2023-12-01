@@ -1,4 +1,5 @@
 import axios from "../axios";
+import { SERVER_URL } from "../utils/static.data";
 
 class FileServices {
 	async getFiles() {
@@ -13,8 +14,10 @@ class FileServices {
 	}
 
 	async createFile(body) {
-		const response = await axios.post("/", body);
-		// se coloca la ruta "/" porque es el principal
+		// se debe usar este header para poder crear un file con title y document
+		const headers = { headers: { "Content-Type": "multipart/form-data" } };
+
+		const response = await axios.post(`${SERVER_URL}/upload`, body, headers);
 		return response;
 	}
 

@@ -17,3 +17,5 @@ export const folderImg =
 export const userNotAuthorized = "Invalid credentials";
 
 export const fieldEmpty = "Error, the fields must not be empty";
+
+export const SERVER_URL = "http://localhost:5001/api/v1";

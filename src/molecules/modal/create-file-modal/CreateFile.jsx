@@ -3,22 +3,19 @@ import { useDispatch } from "react-redux";
 // static data
 import { fileService } from "../../../services/api/files.service";
 import { addDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
-import { UtilsService } from "../../../services/utils/utils.service";
 
 const CreateFile = (prop) => {
-	const { titleFile, setTitlefile, arrayFiles } = prop;
+	const { titleFile, setTitlefile } = prop;
 
 	const dispatch = useDispatch();
 
 	const [file, setFile] = useState("");
-	const [document, setDocument] = useState("");
 
 	const onChangeFile = (event) => {
 		const fileSelected = event.target.files[0];
 		if (fileSelected) {
-			// escogemops solo el type porque con el vamos a simular un archivo
-			setDocument(fileSelected.type);
-			setFile(event.target.value);
+			// se envia el file completo
+			setFile(fileSelected);
 		}
 	};
 
@@ -26,27 +23,23 @@ const CreateFile = (prop) => {
 		try {
 			event.preventDefault();
 
-			// para calculare el maximo id del array de files
-			const maxId = UtilsService.maxId(arrayFiles);
+			// El formData es un objeto que permite adjunta en el info del req.body y el req.file
+			// en este caso el titlo del file y el mismo file
+			const formData = new FormData();
+			// se usa "append" para adjuntarlo a el
+			formData.append("title", titleFile);
+			formData.append("document", file);
 
-			const { documentPath, fileType } =
-				UtilsService.setDocumentByType(document);
-			// console.log(documentType, "esto nos trae documentType");
-
-			const { data } = await fileService.createFile({
-				id: maxId + 1,
-				title: titleFile,
-				document: documentPath,
-				fileType,
-			});
+			// request al action para crear el file
+			const { data } = await fileService.createFile(formData);
 
 			dispatch(
 				// aqui se usa el actions para crear un nuevo file
-				addDocument(data)
+				addDocument(data.file)
+				// se usa data.file ya que en file es que se encuentra el objeto final a procesar
 			);
 
 			setTitlefile("");
-			setDocument("");
 			setFile("");
 		} catch (error) {
 			console.log(error.stack);
