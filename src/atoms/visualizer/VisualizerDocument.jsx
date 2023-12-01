@@ -5,7 +5,6 @@ import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import Navbar from "../../molecules/navbar/Navbar";
 // static data
 import useLocalStorage from "../../hooks/useLocalStorage";
-import { urlWord } from "../../services/utils/static.data";
 import { fileService } from "../../services/api/files.service";
 import Login from "../auth/Login";
 // css
@@ -31,22 +30,15 @@ const VisualizerDocument = () => {
 
 		const fetchFileById = async () => {
 			try {
-				const idnum = parseInt(idFile);
-				const { data } = await fileService.getFileById(idnum);
-				// {data} es una destructuracion de la  propiedad data al nombre que le pongas a la const
-
-				// se crea este condicional para evitar errores del DocViewer con archivos de tipo word
-				const uri =
-					data.fileType !== "application/msword"
-						? `${process.env.PUBLIC_URL}${data.document}`
-						: urlWord;
+				const { data } = await fileService.getFileById(idFile);
+				// {data} es una destructuracion de la  propiedad data al nombre que le pongas a la cons
 
 				const docs = [
 					//metemos docs dentro para que pueda tener acceso a "data" y sus propiedades
 					{
-						uri,
-						fileType: data.fileType,
-						fileName: data.title,
+						uri: data.file.document,
+						fileType: data.file.fileType,
+						fileName: data.file.title,
 					},
 				];
 				setFile(docs);

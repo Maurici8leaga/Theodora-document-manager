@@ -39,7 +39,8 @@ const DocumentManager = () => {
 			// toda llamada a un api es async
 			try {
 				const response = await fileService.getFiles(); //request al API
-				dispatch(getDocument(response.data));
+				dispatch(getDocument(response.data.files));
+				// se usa data.files porque en files es donde se encuentra los archivos que vienen del back
 			} catch (error) {
 				console.log(error.stack);
 			}
@@ -88,7 +89,7 @@ const DocumentManager = () => {
 										files.map((item, index) => (
 											<TableFiles
 												key={index}
-												idFile={item.id}
+												idFile={item._id}
 												title={item.title}
 												fileType={item.fileType}
 												setIdFile={setIdFile}

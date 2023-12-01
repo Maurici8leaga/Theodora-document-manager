@@ -3,13 +3,12 @@ import { SERVER_URL } from "../utils/static.data";
 
 class FileServices {
 	async getFiles() {
-		const response = await axios.get("/");
+		const response = await axios.get(`${SERVER_URL}/`);
 		return response;
 	}
 
 	async getFileById(body) {
-		const response = await axios.get(`/${body}`);
-		// para solicitar un elemento del back con solo el id es asi '/:id segun la documentacion del json-server
+		const response = await axios.get(`${SERVER_URL}/searchFile/${body}`);
 		return response;
 	}
 
