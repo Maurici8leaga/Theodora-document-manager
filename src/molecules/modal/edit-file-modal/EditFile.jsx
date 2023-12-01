@@ -8,7 +8,6 @@ const EditFile = (prop) => {
 	const dispatch = useDispatch();
 
 	const [newTitle, setNewTitle] = useState("");
-	const [documentUpdate, setDocumentUpdate] = useState("");
 	const [error, setError] = useState("");
 
 	const updateFile = async (event) => {
@@ -16,15 +15,14 @@ const EditFile = (prop) => {
 			event.preventDefault();
 
 			if (newTitle.length > 0) {
-				const response = await fileService.updateFile({
-					id: documentUpdate.id,
+				// se envia el id del file y solo el title actualizado
+				const res = await fileService.updateFile(idFile, {
 					title: newTitle,
-					document: documentUpdate.document,
 				});
 
 				dispatch(
 					// aqui se usa el action de update para actualizar el document
-					updateDocument(response.data)
+					updateDocument(res.data.file)
 				);
 				setError(null);
 			} else {
@@ -42,10 +40,9 @@ const EditFile = (prop) => {
 
 	useEffect(() => {
 		if (idFile !== undefined && arrayDocuments) {
-			const fileSelected = arrayDocuments.find((item) => item.id === idFile);
+			const fileSelected = arrayDocuments.find((item) => item._id === idFile);
 			if (fileSelected) {
 				setNewTitle(fileSelected.title);
-				setDocumentUpdate(fileSelected);
 			}
 		}
 	}, [idFile, arrayDocuments]);

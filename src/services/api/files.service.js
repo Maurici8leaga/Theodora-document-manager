@@ -20,9 +20,16 @@ class FileServices {
 		return response;
 	}
 
-	async updateFile(body) {
-		const response = await axios.patch(`/${body.id}`, body);
-		// para este ENDPOINT hay que pasarle el ID del item en el URL
+	async updateFile(id, body) {
+		// para actualizar se debe colocar este header de tipo "application/json"
+		const headers = { headers: { "Content-Type": "application/json" } };
+
+		const response = await axios.put(
+			`${SERVER_URL}/editFile/${id}`,
+			body,
+			headers
+		);
+		// hay que enviar el id del file y en el body, la actualizacion del file con new title
 		return response;
 	}
 
