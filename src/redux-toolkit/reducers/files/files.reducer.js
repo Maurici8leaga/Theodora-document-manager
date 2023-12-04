@@ -21,19 +21,21 @@ const fileSlice = createSlice({
 			// de esta forma metemos el nuevo file dentro del archivo de files
 		},
 		updateDocument: (state, action) => {
-			const { id, title, document } = action.payload;
-			const file = state.documents.find((item) => item.id === id); // se debe buscar para poder actualizarlo
+			const { _id, title } = action.payload;
+
+			const file = state.documents.find((item) => item._id === _id);
+			// se debe buscar primero el file para poder actualizarlo
 			if (file) {
 				// de esta forma sobre escribimos el valor del titulo actualizado y el documento existente
 				file.title = title;
-				file.document = document;
 			}
 		},
 		deleteDocument: (state, action) => {
-			const { id } = action.payload;
-			const file = state.documents.find((item) => item.id === id); // se debe buscar para poder eliminarlo
+			const { _id } = action.payload;
+
+			const file = state.documents.find((item) => item._id === _id); // se debe buscar para poder eliminarlo
 			if (file) {
-				const data = state.documents.filter((item) => item.id !== id); //con filter quitamos del array el id seleccionado y devolvemos el resto
+				const data = state.documents.filter((item) => item._id !== _id); //con filter quitamos del array el id seleccionado y devolvemos el resto
 				// se debe almacenar en una constante antes de retornar ya que es unn objeto proxy, si se retorna directamente da error
 				return { ...state, documents: data };
 				// de esta forma actualizamos el state con los files restantess

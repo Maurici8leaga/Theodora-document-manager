@@ -33,8 +33,9 @@ class FileServices {
 		return response;
 	}
 
-	async deleteFile(body) {
-		const response = await axios.delete(`/${body.id}`, body);
+	async deleteFile(id) {
+		const response = await axios.delete(`${SERVER_URL}/deleteFile/${id}`);
+		// const response = await axios.delete(`/${body.id}`, body);
 		// para este ENDPOINT hay que pasarle el ID del item en el URL y el body que sera el id a eliminar ya que lo esperan en el reducer
 		return response;
 	}

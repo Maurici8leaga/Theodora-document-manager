@@ -15,9 +15,9 @@ const DeleteFile = (prop) => {
 
 	const deleteFile = async (idFile) => {
 		try {
-			await fileService.deleteFile({ id: idFile });
+			await fileService.deleteFile(idFile);
 
-			dispatch(deleteDocument({ id: idFile }));
+			dispatch(deleteDocument({ _id: idFile }));
 			// en este se pasa solo id porque el reducer esta esperando el id del document
 			setTitle("");
 			setTypeFile("");
@@ -28,7 +28,7 @@ const DeleteFile = (prop) => {
 
 	useEffect(() => {
 		if (idFile !== undefined && arrayDocuments) {
-			const fileSelected = arrayDocuments.find((item) => item.id === idFile);
+			const fileSelected = arrayDocuments.find((item) => item._id === idFile);
 			if (fileSelected) {
 				setTitle(fileSelected.title);
 				setTypeFile(fileSelected.fileType);
