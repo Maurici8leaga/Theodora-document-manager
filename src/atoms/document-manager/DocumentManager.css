@@ -15,6 +15,10 @@
 
 .bg-card {
 	border: 1px dashed var(--primary);
-	background-color: #d6cfdc;
+	background-color: var(--lilac);
 	color: var(--wite);
+}
+
+.bg-lilac {
+	background-color: var(--lilac);
 }

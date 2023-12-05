@@ -84,6 +84,14 @@ const DocumentManager = () => {
 							<DeleteFile idFile={idFile} arrayDocuments={files} />
 
 							<div className="text-center mt-5">
+								<div className="bg-lilac rounded-top p-2 mb-2">
+									<li className="list-group-item d-flex justify-content-around align-items-center">
+										<span className="d-flex">NAME</span>
+										<span className="d-flex">FORMAT</span>
+										<span className="d-flex">CREATED</span>
+										<span className="d-flex">OPCION</span>
+									</li>
+								</div>
 								<ul className="list-group gap-2">
 									{files && files.length > 0 ? (
 										files.map((item, index) => (
@@ -92,6 +100,7 @@ const DocumentManager = () => {
 												idFile={item._id}
 												title={item.title}
 												fileType={item.fileType}
+												date={item.createAt}
 												setIdFile={setIdFile}
 											/>
 										))
