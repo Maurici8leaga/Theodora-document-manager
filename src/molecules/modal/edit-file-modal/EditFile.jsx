@@ -8,7 +8,11 @@ const EditFile = (prop) => {
 	const dispatch = useDispatch();
 
 	const [newTitle, setNewTitle] = useState("");
-	const [error, setError] = useState("");
+	const [oldTitle, setOldTitle] = useState("");
+	const [errorMsg, setErrorMsg] = useState({
+		status: false,
+		msg: "",
+	});
 
 	const updateFile = async (event) => {
 		try {
@@ -24,28 +28,36 @@ const EditFile = (prop) => {
 					// aqui se usa el action de update para actualizar el document
 					updateDocument(res.data.file)
 				);
-				setError(null);
+				setErrorMsg({ status: false, msg: "" });
 			} else {
-				setError("Title can not be empty");
+				setErrorMsg({ status: true, msg: "Title can not be empty" });
 			}
 		} catch (error) {
+			// de esta forma podemos mostrar el mensaje que viene del back
+			setErrorMsg({ status: true, msg: error?.response?.data.message });
 			console.log(error.stack);
 		}
-	};
-
-	const handleClose = () => {
-		setNewTitle(newTitle);
-		setError(null);
 	};
 
 	useEffect(() => {
 		if (idFile !== undefined && arrayDocuments) {
 			const fileSelected = arrayDocuments.find((item) => item._id === idFile);
 			if (fileSelected) {
-				setNewTitle(fileSelected.title);
+				// al cargar cada modal para editar este buscara y establecera el titulo viejo del documento
+				setOldTitle(fileSelected.title);
+				// y se coloca el titulo nuevo como "" para que reseteé y asi no recuerde el titulo del archivo anterior clickeado
+				// en caso de que se cambie varios titulos
+				setNewTitle("");
 			}
 		}
 	}, [idFile, arrayDocuments]);
+
+	const handleClose = () => {
+		// se le pasa al new title el titulo viejo ya que cancelo o cerro el modal
+		// esto es porque si se deja el "setNewTitle(newTitle)" va a guarda el input con el cambio y no deberia porque cancelo o cerro
+		setNewTitle(oldTitle);
+		setErrorMsg({ status: false, msg: "" });
+	};
 
 	return (
 		<div
@@ -77,14 +89,14 @@ const EditFile = (prop) => {
 							<input
 								name="title-edit"
 								type="text"
-								value={newTitle}
+								value={newTitle} //OJO debe ir siempre el newTitle porque si no mostrara los cambios del titulo
 								className="form-control mb-4"
-								placeholder="Title"
+								placeholder={`${oldTitle}`} //se le pasa el titulo viejo como placeholder para que muestre como estaba antes de ser modificado
 								onChange={(event) => setNewTitle(event.target.value)}
 							/>
 
-							{error ? (
-								<label className="form-label text-danger">{error}</label>
+							{errorMsg ? (
+								<label className="form-label text-danger">{errorMsg.msg}</label>
 							) : (
 								<></>
 							)}
@@ -101,7 +113,7 @@ const EditFile = (prop) => {
 								<button
 									type="submit"
 									className="btn btn-outline-primary"
-									data-bs-dismiss={`${newTitle.length > 0 ? "modal" : null}`}
+									data-bs-dismiss={`${errorMsg.status ? "modal" : null}`}
 								>
 									Save changes
 								</button>
