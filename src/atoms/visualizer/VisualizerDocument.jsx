@@ -13,6 +13,7 @@ import "../../index.css";
 
 const VisualizerDocument = () => {
 	const { idFile } = useParams();
+	console.log(typeof idFile, "id entrado al visualizer");
 
 	const navigate = useNavigate();
 
@@ -21,6 +22,10 @@ const VisualizerDocument = () => {
 
 	// state for file
 	const [file, setFile] = useState([]);
+
+	// state for errors
+	const [hasError, setHasError] = useState(false);
+	const [errorMsg, setErrorMsg] = useState("");
 
 	useEffect(() => {
 		if (!tokeAuthentication) {
@@ -42,8 +47,12 @@ const VisualizerDocument = () => {
 					},
 				];
 				setFile(docs);
+				setHasError(false);
+				setErrorMsg("");
 			} catch (error) {
 				console.log(error.stack);
+				setHasError(true);
+				setErrorMsg(error.response.data.message);
 			}
 		};
 
@@ -56,6 +65,11 @@ const VisualizerDocument = () => {
 				<div className="bg-custom">
 					<Navbar />
 					<div className="container-Visualizer">
+						{hasError && errorMsg && (
+							<div className="alert alert-danger" role="alert">
+								{errorMsg}
+							</div>
+						)}
 						<button
 							type="button"
 							className="btn btn-outline-secondary my-3"
