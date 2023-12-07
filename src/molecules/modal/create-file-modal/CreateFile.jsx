@@ -5,7 +5,7 @@ import { fileService } from "../../../services/api/files.service";
 import { addDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
 
 const CreateFile = (prop) => {
-	const { titleFile, setTitlefile } = prop;
+	const { titleFile, setTitlefile, setHasError, setErrorMsg } = prop;
 
 	const dispatch = useDispatch();
 
@@ -16,6 +16,24 @@ const CreateFile = (prop) => {
 		if (fileSelected) {
 			// se envia el file completo
 			setFile(fileSelected);
+		} else {
+			// si es undefined el file se debe colocar en blanco para que reseteé el state y no recuerde el anterior seleccionado
+			setFile("");
+			setHasError(true);
+			setErrorMsg("Error, file undefined");
+		}
+	};
+
+	const onClose = () => {
+		setTitlefile("");
+		// se debe colcar null el state del input file
+		setFile(null);
+
+		//+ para resetear el valor del input debe hacerse de esta forma, OJO NO TODOS LOS NAVEGADORES LO PERMITEN
+		const fileInput = document.getElementById("fileInput");
+		// esto es debido a que por razones de seguridad no se puede acceder al value del input con solo el useState
+		if (fileInput) {
+			fileInput.value = "";
 		}
 	};
 
@@ -23,26 +41,34 @@ const CreateFile = (prop) => {
 		try {
 			event.preventDefault();
 
-			// El formData es un objeto que permite adjunta en el info del req.body y el req.file
-			// en este caso el titlo del file y el mismo file
-			const formData = new FormData();
-			// se usa "append" para adjuntarlo a el
-			formData.append("title", titleFile);
-			formData.append("document", file);
+			if (titleFile.length > 2) {
+				// El formData es un objeto que permite adjunta en el info del req.body y el req.file
+				// en este caso el titlo del file y el mismo file
+				const formData = new FormData();
+				// se usa "append" para adjuntarlo a el
+				formData.append("title", titleFile);
+				formData.append("document", file);
 
-			// request al action para crear el file
-			const { data } = await fileService.createFile(formData);
+				// request al action para crear el file
+				const { data } = await fileService.createFile(formData);
 
-			dispatch(
-				// aqui se usa el actions para crear un nuevo file
-				addDocument(data.file)
-				// se usa data.file ya que en file es que se encuentra el objeto final a procesar
-			);
-
-			setTitlefile("");
-			setFile("");
+				dispatch(
+					// aqui se usa el actions para crear un nuevo file
+					addDocument(data.file)
+					// se usa data.file ya que en file es que se encuentra el objeto final a procesar
+				);
+				// se resetea los valores del title y el file para que cuando se abra nuevamente esten los input vacios
+				setTitlefile("");
+				setFile("");
+			} else {
+				setHasError(true);
+				setErrorMsg("Error, title should have at least 2 characters");
+			}
 		} catch (error) {
 			console.log(error.stack);
+			setHasError(true);
+			// se coloca el mensaje de error del backend a display error
+			setErrorMsg(error.response.data.message);
 		}
 	};
 
@@ -65,6 +91,7 @@ const CreateFile = (prop) => {
 							className="btn-close"
 							data-bs-dismiss="modal"
 							aria-label="Close"
+							onClick={onClose}
 						></button>
 					</div>
 					<div className="modal-body">
@@ -76,12 +103,13 @@ const CreateFile = (prop) => {
 								value={titleFile}
 								className="form-control mb-3"
 								placeholder="File name"
+								maxLength={15} //para que no supere los 15 caracters que se establecio en el back
 								onChange={(event) => setTitlefile(event.target.value)}
-								required
 							/>
 
 							<label className="form-label">File</label>
 							<input
+								id="fileInput"
 								className="form-control"
 								type="file"
 								name="document"
@@ -89,7 +117,6 @@ const CreateFile = (prop) => {
 								// estos tipos de formatos se llaman MIME  https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 								accept="application/pdf, text/plain, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 								onChange={onChangeFile}
-								required
 							/>
 							<div className="form-text mb-3">
 								<p> You can only choose file of type PDF, TXT or Word </p>
@@ -100,15 +127,16 @@ const CreateFile = (prop) => {
 									type="button"
 									className="btn btn-outline-secondary"
 									data-bs-dismiss="modal"
+									onClick={onClose}
 								>
 									Cancel
 								</button>
 								<button
 									type="submit"
 									className="btn btn-outline-primary d-flex"
-									data-bs-dismiss={`${
-										titleFile !== "" && file !== "" ? "modal" : null
-									}`}
+									data-bs-dismiss="modal"
+									// se crea este disabled para reafirmar la seguridad de que no se envie ni el titulo vaacio ni el file
+									disabled={!titleFile || !file}
 								>
 									Add
 								</button>

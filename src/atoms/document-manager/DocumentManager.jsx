@@ -52,7 +52,21 @@ const DocumentManager = () => {
 			}
 		};
 		fetchFiles();
-	}, [dispatch, navigate, tokeAuthentication]);
+
+		// para desaparecer el mensaje de error
+		if (hasError && errorMsg) {
+			// Muestra el mensaje de error
+			const timeout = setTimeout(() => {
+				// Oculta el mensaje de error después de 5 segundos
+				setHasError(false);
+				setErrorMsg("");
+			}, 5000);
+
+			// Limpia el temporizador con la function "clearTimeout"
+			// cuando el componente se desmonta o cuando cambia el estado
+			return () => clearTimeout(timeout);
+		}
+	}, [dispatch, navigate, tokeAuthentication, hasError, errorMsg]);
 
 	return (
 		<>
@@ -92,7 +106,12 @@ const DocumentManager = () => {
 									</button>
 								</div>
 							</div>
-							<CreateFile titleFile={titleFile} setTitlefile={setTitlefile} />
+							<CreateFile
+								titleFile={titleFile}
+								setTitlefile={setTitlefile}
+								setHasError={setHasError}
+								setErrorMsg={setErrorMsg}
+							/>
 
 							<EditFile idFile={idFile} arrayDocuments={files} />
 
