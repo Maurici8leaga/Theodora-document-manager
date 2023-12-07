@@ -29,6 +29,10 @@ const DocumentManager = () => {
 	const [titleFile, setTitlefile] = useState("");
 	const [idFile, setIdFile] = useState("");
 
+	// state for errors
+	const [hasError, setHasError] = useState(false);
+	const [errorMsg, setErrorMsg] = useState("");
+
 	useEffect(() => {
 		if (!tokeAuthentication) {
 			// usamos navigate en el useEffect paara que cuando cargue este componente si el user no esta autenticado redireccione al inicio
@@ -43,6 +47,8 @@ const DocumentManager = () => {
 				// se usa data.files porque en files es donde se encuentra los archivos que vienen del back
 			} catch (error) {
 				console.log(error.stack);
+				setHasError(true);
+				setErrorMsg(error.response.data.message);
 			}
 		};
 		fetchFiles();
@@ -56,6 +62,12 @@ const DocumentManager = () => {
 
 					<div className="container-md mt-5 vh-100">
 						<div className="container-custom">
+							{hasError && errorMsg && (
+								<div className="alert alert-danger" role="alert">
+									{errorMsg}
+								</div>
+							)}
+
 							<div className="card text-center bg-card">
 								<div className="card-body">
 									<h3 className="card-title">Library</h3>
@@ -84,14 +96,28 @@ const DocumentManager = () => {
 							<DeleteFile idFile={idFile} arrayDocuments={files} />
 
 							<div className="text-center mt-5">
-								<div className="bg-lilac rounded-top p-2 mb-2">
-									<li className="list-group-item d-flex justify-content-around align-items-center">
-										<span className="d-flex">NAME</span>
-										<span className="d-flex">FORMAT</span>
-										<span className="d-flex">CREATED</span>
-										<span className="d-flex">OPCION</span>
-									</li>
-								</div>
+								{files.length === 0 ? (
+									<figure className="text-center">
+										<h5>No files yet</h5>
+										<img
+											src={
+												"https://cdn-icons-png.flaticon.com/512/7486/7486754.png"
+											}
+											alt=" icon"
+											style={{ width: "150px" }}
+										/>
+									</figure>
+								) : (
+									<div className="bg-lilac rounded-top p-2 mb-2">
+										<li className="list-group-item d-flex justify-content-around align-items-center">
+											<span className="d-flex">NAME</span>
+											<span className="d-flex">FORMAT</span>
+											<span className="d-flex">CREATED</span>
+											<span className="d-flex">OPCION</span>
+										</li>
+									</div>
+								)}
+
 								<ul className="list-group gap-2">
 									{files && files.length > 0 ? (
 										files.map((item, index) => (

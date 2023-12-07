@@ -10,6 +10,7 @@ const EditFile = (prop) => {
 	const [newTitle, setNewTitle] = useState("");
 	const [errorMsg, setErrorMsg] = useState("");
 
+	// ESTE STATE ES PARA CERRAR EL MODAL, ESTA EN PRUEBA NO SE MANTENDRA CON ESTE NOMBRE
 	const [cosa, setCosa] = useState("");
 
 	const updateFile = async (event) => {
@@ -54,6 +55,7 @@ const EditFile = (prop) => {
 		// setErrorMsg({ status: false, msg: "" });
 	}, [idFile, arrayDocuments, errorMsg]);
 
+	// ESTA FUNCIONALDAD ESTA APRUEBA AUN , NOMBRE VA A CAMBIAR SI PASA LAS PRUEBAS
 	const prueba = (event) => {
 		if (event.length > 0 && event.length < 15) {
 			setNewTitle(event);
