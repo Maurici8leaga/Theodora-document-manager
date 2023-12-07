@@ -13,7 +13,6 @@ import "../../index.css";
 
 const VisualizerDocument = () => {
 	const { idFile } = useParams();
-	console.log(typeof idFile, "id entrado al visualizer");
 
 	const navigate = useNavigate();
 

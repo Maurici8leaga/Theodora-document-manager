@@ -6,7 +6,7 @@ import { deleteDocument } from "../../../redux-toolkit/reducers/files/files.redu
 import { folderImg } from "../../../services/utils/static.data";
 
 const DeleteFile = (prop) => {
-	const { idFile, arrayDocuments } = prop;
+	const { idFile, arrayDocuments, setHasError, setErrorMsg } = prop;
 
 	const dispatch = useDispatch();
 
@@ -23,6 +23,8 @@ const DeleteFile = (prop) => {
 			setTypeFile("");
 		} catch (error) {
 			console.log(error.stack);
+			setHasError(true);
+			setErrorMsg(error.response.data.message);
 		}
 	};
 

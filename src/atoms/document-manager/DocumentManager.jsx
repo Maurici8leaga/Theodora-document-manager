@@ -63,8 +63,11 @@ const DocumentManager = () => {
 					<div className="container-md mt-5 vh-100">
 						<div className="container-custom">
 							{hasError && errorMsg && (
-								<div className="alert alert-danger" role="alert">
-									{errorMsg}
+								<div
+									className="alert alert-danger alert-dismissible"
+									role="alert"
+								>
+									<div>{errorMsg}</div>
 								</div>
 							)}
 
@@ -93,7 +96,12 @@ const DocumentManager = () => {
 
 							<EditFile idFile={idFile} arrayDocuments={files} />
 
-							<DeleteFile idFile={idFile} arrayDocuments={files} />
+							<DeleteFile
+								idFile={idFile}
+								arrayDocuments={files}
+								setHasError={setHasError}
+								setErrorMsg={setErrorMsg}
+							/>
 
 							<div className="text-center mt-5">
 								{files.length === 0 ? (
