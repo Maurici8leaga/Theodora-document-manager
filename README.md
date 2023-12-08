@@ -20,15 +20,11 @@ Which will run on the 3000 port of your browser, then open http://localhost:3000
 
 ### API
 
-To run the API you will have to open another terminal in your code editor, then you will have to run the following comand:
+To run the API you will have to follow the instructions found in the following link;
 
-```sh
-    npx json-server -p 3500 -w Api/db.json
-```
+https://github.com/Maurici8leaga/Backend-theodora-document-manager?tab=readme-ov-file#theodora-document-manager-server
 
-The number of port is up to, but you need to make sure that the port is other than port 3000. After that, this comand will run a fake API with json-server. The fake data will saved in the db.json file that is in the Api folder at the beginning of the project.
-
-Once the previous command is executed, you will be requested for username and password which those are;
+Once the commands have been executed and the API is running, you will be requested for username and password which those are;
 
 ```sh
    username: admin
