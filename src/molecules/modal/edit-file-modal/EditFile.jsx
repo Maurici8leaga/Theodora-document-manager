@@ -4,69 +4,52 @@ import { updateDocument } from "../../../redux-toolkit/reducers/files/files.redu
 import { fileService } from "../../../services/api/files.service";
 
 const EditFile = (prop) => {
-	const { idFile, arrayDocuments } = prop;
+	const { idFile, arrayDocuments, setHasError, setErrorMsg } = prop;
 	const dispatch = useDispatch();
 
+	// state for new title
 	const [newTitle, setNewTitle] = useState("");
-	const [errorMsg, setErrorMsg] = useState("");
-
-	// ESTE STATE ES PARA CERRAR EL MODAL, ESTA EN PRUEBA NO SE MANTENDRA CON ESTE NOMBRE
-	const [cosa, setCosa] = useState("");
 
 	const updateFile = async (event) => {
 		try {
 			event.preventDefault();
 
-			// quitamos los espacios en blanco del inicio y final del titulo
-			const verifyTitle = newTitle.trim();
+			// debe ir este condicional para cuando el length es menor que 2 ya que asi se crea otra barrera de seguridad aparte la del backend
+			if (newTitle.length > 2) {
+				// quitamos los espacios en blanco del inicio y final del titulo asi no puede enviar algo con puros espacios en blanco
+				const verifyTitle = newTitle.trim();
 
-			// se envia el id del file y solo el title actualizado
-			const res = await fileService.updateFile(idFile, {
-				title: verifyTitle,
-			});
+				// se envia el id del file y solo el title actualizado
+				const res = await fileService.updateFile(idFile, {
+					title: verifyTitle,
+				});
 
-			dispatch(
-				// aqui se usa el action de update para actualizar el document
-				updateDocument(res.data.file)
-			);
-			setErrorMsg("");
-
-			setCosa("modal");
-			setErrorMsg("");
+				dispatch(
+					// aqui se usa el action de update para actualizar el document
+					updateDocument(res.data.file)
+				);
+			} else {
+				setHasError(true);
+				// de esta forma podemos mostrar el mensaje que viene del back
+				setErrorMsg("Error, title should have at least 2 characters");
+			}
 		} catch (error) {
-			setCosa(null);
-			// de esta forma podemos mostrar el mensaje que viene del back
-			setErrorMsg({ status: true, msg: error.response.data.message });
 			console.log(error.stack);
+			setHasError(true);
+			// de esta forma podemos mostrar el mensaje que viene del back
+			setErrorMsg(error.response.data.message);
 		}
 	};
 
 	useEffect(() => {
-		// ESTA EN VERREMOS ESTA FUNCIONALIDAD
-		// if (idFile !== undefined && arrayDocuments) {
-		// 	const fileSelected = arrayDocuments.find((item) => item._id === idFile);
-		// 	// if (fileSelected) {
-		// 	// 	console.log("setenndo el new title");
-		// 	// 	// al cargar cada modal para editar este buscara y establecera el titulo viejo del documento
-		// 	// }
-		// }
-		setNewTitle("");
-		// para que cuando habra el modal no exista error antiguos
-		// setErrorMsg({ status: false, msg: "" });
-	}, [idFile, arrayDocuments, errorMsg]);
-
-	// ESTA FUNCIONALDAD ESTA APRUEBA AUN , NOMBRE VA A CAMBIAR SI PASA LAS PRUEBAS
-	const prueba = (event) => {
-		if (event.length > 0 && event.length < 15) {
-			setNewTitle(event);
-			setErrorMsg("");
-		} else {
-			setErrorMsg({
-				status: true,
-				msg: " should have  2 and 15 characterTitles",
-			});
+		if (idFile !== undefined && arrayDocuments) {
+			const fileSelected = arrayDocuments.find((item) => item._id === idFile);
+			if (fileSelected) {
+				// al cargar cada modal para editar este buscara y establecera el titulo viejo del documento
+				setNewTitle(fileSelected.title);
+			}
 		}
-	};
+	}, [idFile, arrayDocuments]);
 
 	return (
 		<div
@@ -100,14 +83,8 @@ const EditFile = (prop) => {
 								className="form-control mb-4"
 								placeholder="New title"
 								maxLength={15}
-								onChange={(event) => prueba(event.target.value)}
+								onChange={(event) => setNewTitle(event.target.value)}
 							/>
-
-							{errorMsg ? (
-								<label className="form-label text-danger">{errorMsg.msg}</label>
-							) : (
-								<></>
-							)}
 
 							<div className="modal-footer">
 								<button
@@ -120,7 +97,9 @@ const EditFile = (prop) => {
 								<button
 									type="submit"
 									className="btn btn-outline-primary"
-									data-bs-dismiss={cosa}
+									data-bs-dismiss="modal"
+									// se crea este disabled para reafirmar la seguridad de que no se envie cuando el titlo esta vacio
+									disabled={!newTitle}
 								>
 									Save changes
 								</button>

@@ -113,7 +113,12 @@ const DocumentManager = () => {
 								setErrorMsg={setErrorMsg}
 							/>
 
-							<EditFile idFile={idFile} arrayDocuments={files} />
+							<EditFile
+								idFile={idFile}
+								arrayDocuments={files}
+								setHasError={setHasError}
+								setErrorMsg={setErrorMsg}
+							/>
 
 							<DeleteFile
 								idFile={idFile}
