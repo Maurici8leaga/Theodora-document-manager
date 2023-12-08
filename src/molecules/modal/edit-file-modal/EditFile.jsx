@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { updateDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
 import { fileService } from "../../../services/api/files.service";
+import { titleNotAllowed } from "../../../services/utils/static.data";
 
 const EditFile = (prop) => {
 	const { idFile, arrayDocuments, setHasError, setErrorMsg } = prop;
@@ -31,7 +32,7 @@ const EditFile = (prop) => {
 			} else {
 				setHasError(true);
 				// de esta forma podemos mostrar el mensaje que viene del back
-				setErrorMsg("Error, title should have at least 2 characters");
+				setErrorMsg(titleNotAllowed);
 			}
 		} catch (error) {
 			console.log(error.stack);

@@ -3,6 +3,10 @@ import { useDispatch } from "react-redux";
 // static data
 import { fileService } from "../../../services/api/files.service";
 import { addDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
+import {
+	fileUndefined,
+	titleNotAllowed,
+} from "../../../services/utils/static.data";
 
 const CreateFile = (prop) => {
 	const { titleFile, setTitlefile, setHasError, setErrorMsg } = prop;
@@ -20,7 +24,7 @@ const CreateFile = (prop) => {
 			// si es undefined el file se debe colocar en blanco para que reseteé el state y no recuerde el anterior seleccionado
 			setFile("");
 			setHasError(true);
-			setErrorMsg("Error, file undefined");
+			setErrorMsg(fileUndefined);
 		}
 	};
 
@@ -62,7 +66,7 @@ const CreateFile = (prop) => {
 				setFile("");
 			} else {
 				setHasError(true);
-				setErrorMsg("Error, title should have at least 2 characters");
+				setErrorMsg(titleNotAllowed);
 			}
 		} catch (error) {
 			console.log(error.stack);

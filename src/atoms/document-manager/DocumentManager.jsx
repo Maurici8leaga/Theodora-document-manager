@@ -13,6 +13,7 @@ import useLocalStorage from "../../hooks/useLocalStorage";
 import { fileService } from "../../services/api/files.service"; // se podra eliminar
 import { getDocument } from "../../redux-toolkit/reducers/files/files.reducer"; // se podra eliminar
 import UploadIcon from "../../assets/upload.png";
+import { emptyBoxImg } from "../../services/utils/static.data";
 // css
 import "../document-manager/DocumentManager.css";
 import "../../index.css";
@@ -132,9 +133,7 @@ const DocumentManager = () => {
 									<figure className="text-center">
 										<h5>No files yet</h5>
 										<img
-											src={
-												"https://cdn-icons-png.flaticon.com/512/7486/7486754.png"
-											}
+											src={emptyBoxImg}
 											alt=" icon"
 											style={{ width: "150px" }}
 										/>
