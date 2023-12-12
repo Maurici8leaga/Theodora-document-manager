@@ -50,11 +50,13 @@ const CreateFile = (prop) => {
 			event.preventDefault();
 
 			if (titleFile.length > 2) {
+				const titleWithoutWhitespaces = titleFile.trim();
+
 				// El formData es un objeto que permite adjunta en el info del req.body y el req.file
 				// en este caso el titlo del file y el mismo file
 				const formData = new FormData();
 				// se usa "append" para adjuntarlo a el
-				formData.append("title", titleFile);
+				formData.append("title", titleWithoutWhitespaces);
 				formData.append("document", file);
 
 				// request al action para crear el file
@@ -70,16 +72,16 @@ const CreateFile = (prop) => {
 				setTitlefile("");
 				setFile("");
 			} else {
-				setLoading(false); // se debe setear false si ocurre un error
 				setHasError(true);
 				setErrorMsg(titleNotAllowed);
+				setLoading(false); // se debe setear false si ocurre un error
 			}
 		} catch (error) {
 			console.log(error.stack);
-			setLoading(false); // se debe setear false si ocurre un error
 			setHasError(true);
 			// se coloca el mensaje de error del backend a display error
 			setErrorMsg(error.response.data.message);
+			setLoading(false); // se debe setear false si ocurre un error
 		}
 	};
 
