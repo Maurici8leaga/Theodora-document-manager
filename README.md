@@ -41,4 +41,4 @@ The UI was built with; React, react-dom, react-router-dom, react-redux, @reduxjs
 
 ### API
 
-The API was built with json-server.
+Basically the api was built with; node js, express and typescript if you want to know more details you can see it on the next page; https://github.com/Maurici8leaga/Backend-theodora-document-manager?tab=readme-ov-file#theodora-document-manager-server
