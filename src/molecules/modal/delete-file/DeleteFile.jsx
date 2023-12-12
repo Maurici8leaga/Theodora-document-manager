@@ -6,7 +6,7 @@ import { deleteDocument } from "../../../redux-toolkit/reducers/files/files.redu
 import { folderImg } from "../../../services/utils/static.data";
 
 const DeleteFile = (prop) => {
-	const { idFile, arrayDocuments, setHasError, setErrorMsg } = prop;
+	const { idFile, arrayDocuments, setHasError, setErrorMsg, setLoading } = prop;
 
 	const dispatch = useDispatch();
 
@@ -14,15 +14,20 @@ const DeleteFile = (prop) => {
 	const [typeFile, setTypeFile] = useState("");
 
 	const deleteFile = async (idFile) => {
+		// parte del patron para un loader;
+		// se setea en la llamada asincrona true afuera del trycatch
+		setLoading(true);
 		try {
 			await fileService.deleteFile(idFile);
 
 			dispatch(deleteDocument({ _id: idFile }));
 			// en este se pasa solo id porque el reducer esta esperando el id del document
+			setLoading(false); // se debe setear false cuando ya el store tiene el valor del objeto
 			setTitle("");
 			setTypeFile("");
 		} catch (error) {
 			console.log(error.stack);
+			setLoading(false); // se debe setear false si ocurre un error
 			setHasError(true);
 			setErrorMsg(error.response.data.message);
 		}

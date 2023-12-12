@@ -5,13 +5,16 @@ import { fileService } from "../../../services/api/files.service";
 import { titleNotAllowed } from "../../../services/utils/static.data";
 
 const EditFile = (prop) => {
-	const { idFile, arrayDocuments, setHasError, setErrorMsg } = prop;
+	const { idFile, arrayDocuments, setHasError, setErrorMsg, setLoading } = prop;
 	const dispatch = useDispatch();
 
 	// state for new title
 	const [newTitle, setNewTitle] = useState("");
 
 	const updateFile = async (event) => {
+		// parte del patron para un loader;
+		// se setea en la llamada asincrona true afuera del trycatch
+		setLoading(true);
 		try {
 			event.preventDefault();
 
@@ -29,13 +32,16 @@ const EditFile = (prop) => {
 					// aqui se usa el action de update para actualizar el document
 					updateDocument(res.data.file)
 				);
+				setLoading(false); // se debe setear false cuando ya el store tiene el valor del objeto
 			} else {
+				setLoading(false); // se debe setear false si ocurre un error
 				setHasError(true);
 				// de esta forma podemos mostrar el mensaje que viene del back
 				setErrorMsg(titleNotAllowed);
 			}
 		} catch (error) {
 			console.log(error.stack);
+			setLoading(false); // se debe setear false si ocurre un error
 			setHasError(true);
 			// de esta forma podemos mostrar el mensaje que viene del back
 			setErrorMsg(error.response.data.message);

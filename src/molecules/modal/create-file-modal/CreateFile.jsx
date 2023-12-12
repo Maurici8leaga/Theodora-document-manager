@@ -9,7 +9,8 @@ import {
 } from "../../../services/utils/static.data";
 
 const CreateFile = (prop) => {
-	const { titleFile, setTitlefile, setHasError, setErrorMsg } = prop;
+	const { titleFile, setTitlefile, setHasError, setErrorMsg, setLoading } =
+		prop;
 
 	const dispatch = useDispatch();
 
@@ -42,6 +43,9 @@ const CreateFile = (prop) => {
 	};
 
 	const createFile = async (event) => {
+		// parte del patron para un loader;
+		// se setea en la llamada asincrona true afuera del trycatch
+		setLoading(true);
 		try {
 			event.preventDefault();
 
@@ -61,15 +65,18 @@ const CreateFile = (prop) => {
 					addDocument(data.file)
 					// se usa data.file ya que en file es que se encuentra el objeto final a procesar
 				);
+				setLoading(false); // se debe setear false cuando ya el store tiene el valor del objeto
 				// se resetea los valores del title y el file para que cuando se abra nuevamente esten los input vacios
 				setTitlefile("");
 				setFile("");
 			} else {
+				setLoading(false); // se debe setear false si ocurre un error
 				setHasError(true);
 				setErrorMsg(titleNotAllowed);
 			}
 		} catch (error) {
 			console.log(error.stack);
+			setLoading(false); // se debe setear false si ocurre un error
 			setHasError(true);
 			// se coloca el mensaje de error del backend a display error
 			setErrorMsg(error.response.data.message);
