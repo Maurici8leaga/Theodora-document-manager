@@ -10,7 +10,3 @@ export const userNotAuthorized = "Invalid credentials";
 export const fieldEmpty = "Error, the fields must not be empty";
 export const fileUndefined = "Error, file undefined";
 export const titleNotAllowed = "Error, title should have at least 2 characters";
-
-export const SERVER_URL =
-	"https://theodora-document-server.onrender.com/api/v1";
-// export const SERVER_URL = "http://localhost:5001/api/v1";
