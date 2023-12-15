@@ -6,53 +6,47 @@ import { titleNotAllowed } from "../../../services/utils/static.data";
 
 const EditFile = (prop) => {
 	const { idFile, arrayDocuments, setHasError, setErrorMsg, setLoading } = prop;
+
 	const dispatch = useDispatch();
 
 	// state for new title
 	const [newTitle, setNewTitle] = useState("");
 
+	// function for update the title to new one and send it to API
 	const updateFile = async (event) => {
-		// parte del patron para un loader;
-		// se setea en la llamada asincrona true afuera del trycatch
 		setLoading(true);
 		try {
 			event.preventDefault();
 
-			// debe ir este condicional para cuando el length es menor que 2 ya que asi se crea otra barrera de seguridad aparte la del backend
+			// verification before update the title
 			if (newTitle.length > 2) {
-				// quitamos los espacios en blanco del inicio y final del titulo asi no puede enviar algo con puros espacios en blanco
+				// delete whitespaces of title
 				const verifyTitle = newTitle.trim();
 
-				// se envia el id del file y solo el title actualizado
 				const res = await fileService.updateFile(idFile, {
 					title: verifyTitle,
 				});
 
-				dispatch(
-					// aqui se usa el action de update para actualizar el document
-					updateDocument(res.data.file)
-				);
-				setLoading(false); // se debe setear false cuando ya el store tiene el valor del objeto
+				dispatch(updateDocument(res.data.file));
+				setLoading(false);
 			} else {
-				setLoading(false); // se debe setear false si ocurre un error
+				setLoading(false);
 				setHasError(true);
-				// de esta forma podemos mostrar el mensaje que viene del back
 				setErrorMsg(titleNotAllowed);
 			}
 		} catch (error) {
 			console.log(error.stack);
-			setLoading(false); // se debe setear false si ocurre un error
+			setLoading(false);
 			setHasError(true);
-			// de esta forma podemos mostrar el mensaje que viene del back
 			setErrorMsg(error.response.data.message);
 		}
 	};
 
 	useEffect(() => {
+		// instance for get the title of the document before it is changed
 		if (idFile !== undefined && arrayDocuments) {
 			const fileSelected = arrayDocuments.find((item) => item._id === idFile);
 			if (fileSelected) {
-				// al cargar cada modal para editar este buscara y establecera el titulo viejo del documento
 				setNewTitle(fileSelected.title);
 			}
 		}
@@ -86,7 +80,7 @@ const EditFile = (prop) => {
 							<input
 								name="title-edit"
 								type="text"
-								value={newTitle} //OJO debe ir siempre el newTitle porque si no mostrara los cambios del titulo
+								value={newTitle}
 								className="form-control mb-4"
 								placeholder="New title"
 								maxLength={15}
@@ -105,7 +99,6 @@ const EditFile = (prop) => {
 									type="submit"
 									className="btn btn-outline-primary"
 									data-bs-dismiss="modal"
-									// se crea este disabled para reafirmar la seguridad de que no se envie cuando el titlo esta vacio
 									disabled={!newTitle}
 								>
 									Save changes

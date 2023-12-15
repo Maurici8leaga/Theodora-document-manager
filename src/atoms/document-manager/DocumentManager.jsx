@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-// component
 import Loader from "../../molecules/loader/Loader";
 import CreateFile from "../../molecules/modal/create-file-modal/CreateFile";
 import EditFile from "../..//molecules/modal/edit-file-modal/EditFile";
@@ -9,13 +8,11 @@ import DeleteFile from "../../molecules/modal/delete-file/DeleteFile";
 import TableFiles from "../../molecules/tableFiles/TableFiles";
 import Navbar from "../../molecules/navbar/Navbar";
 import Login from "../auth/Login";
-// static data
 import useLocalStorage from "../../hooks/useLocalStorage";
-import { fileService } from "../../services/api/files.service"; // se podra eliminar
-import { getDocument } from "../../redux-toolkit/reducers/files/files.reducer"; // se podra eliminar
+import { fileService } from "../../services/api/files.service";
+import { getDocument } from "../../redux-toolkit/reducers/files/files.reducer";
 import UploadIcon from "../../assets/upload.png";
 import { emptyBoxImg } from "../../services/utils/static.data";
-// css
 import "../document-manager/DocumentManager.css";
 import "../../index.css";
 
@@ -23,8 +20,8 @@ const DocumentManager = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
+	// Get files from store
 	const files = useSelector((state) => state.files.documents);
-	// useSelector es un hook  de react-redux que permite extraer data del state de store
 
 	// state for authentication
 	const [tokeAuthentication] = useLocalStorage("token", "get");
@@ -37,45 +34,36 @@ const DocumentManager = () => {
 
 	// state for loader
 	const [loading, setLoading] = useState(false);
-	// OJO GUARDAR ESTE PATRO DE LOADER PARA FUTURO
 
 	useEffect(() => {
 		if (!tokeAuthentication) {
-			// usamos navigate en el useEffect paara que cuando cargue este componente si el user no esta autenticado redireccione al inicio
 			navigate("/");
 		}
-		// como se quiere que cada vez que inicie este component carge la data se coloca esta funcion dentro
-		const fetchFiles = async () => {
-			// toda llamada a un api es async
 
-			// parte del patron para un loader;
-			// se setea en la llamada asincrona true afuera del trycatch
+		// function for request files to API
+		const fetchFiles = async () => {
 			setLoading(true);
 			try {
-				const response = await fileService.getFiles(); //request al API
+				const response = await fileService.getFiles();
 				dispatch(getDocument(response.data.files));
-				// se usa data.files porque en files es donde se encuentra los archivos que vienen del back
-				setLoading(false); // se debe setear false cuando ya el store tiene el valor del objeto
+				setLoading(false);
 			} catch (error) {
 				console.log(error.stack);
-				setLoading(false); // se debe setear false si ocurre un error
+				setLoading(false);
 				setHasError(true);
 				setErrorMsg(error.response.data.message);
 			}
 		};
+
 		fetchFiles();
 
-		// para desaparecer el mensaje de error
+		// instance for reset message error
 		if (hasError && errorMsg) {
-			// Muestra el mensaje de error
 			const timeout = setTimeout(() => {
-				// Oculta el mensaje de error después de 5 segundos
 				setHasError(false);
 				setErrorMsg("");
 			}, 5000);
 
-			// Limpia el temporizador con la function "clearTimeout"
-			// cuando el componente se desmonta o cuando cambia el estado
 			return () => clearTimeout(timeout);
 		}
 	}, [dispatch, navigate, tokeAuthentication, hasError, errorMsg]);
@@ -123,7 +111,6 @@ const DocumentManager = () => {
 								setTitlefile={setTitlefile}
 								setHasError={setHasError}
 								setErrorMsg={setErrorMsg}
-								//se le pasa a estos modales ya que en ellos hay llamadas asincronas y cuando ocurre debe mostrar cargando
 								setLoading={setLoading}
 							/>
 
@@ -132,7 +119,6 @@ const DocumentManager = () => {
 								arrayDocuments={files}
 								setHasError={setHasError}
 								setErrorMsg={setErrorMsg}
-								//se le pasa a estos modales ya que en ellos hay llamadas asincronas y cuando ocurre debe mostrar cargando
 								setLoading={setLoading}
 							/>
 
@@ -141,11 +127,9 @@ const DocumentManager = () => {
 								arrayDocuments={files}
 								setHasError={setHasError}
 								setErrorMsg={setErrorMsg}
-								//se le pasa a estos modales ya que en ellos hay llamadas asincronas y cuando ocurre debe mostrar cargando
 								setLoading={setLoading}
 							/>
 
-							{/* parte del patron del loader es buscar el lugar donde se quiere y establecer el condicional en este caso solo aqui se va a colocar */}
 							{loading ? (
 								<div className="mt-5">
 									<Loader />

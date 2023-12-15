@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
-// components
 import Navbar from "../../molecules/navbar/Navbar";
-// static data
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { fileService } from "../../services/api/files.service";
 import Login from "../auth/Login";
-// css
 import "../visualizer/VisualizerDocument.css";
 import "../../index.css";
 
 const VisualizerDocument = () => {
 	const { idFile } = useParams();
 
+	// hook navigate
 	const navigate = useNavigate();
 
 	// state for authentication
@@ -28,17 +26,15 @@ const VisualizerDocument = () => {
 
 	useEffect(() => {
 		if (!tokeAuthentication) {
-			// usamos navigate en el useEffect paara que cuando cargue este componente si el user no esta autenticado redireccione al inicio
 			navigate("/");
 		}
 
+		// function for request file by id to API
 		const fetchFileById = async () => {
 			try {
 				const { data } = await fileService.getFileById(idFile);
-				// {data} es una destructuracion de la  propiedad data al nombre que le pongas a la cons
 
 				const docs = [
-					//metemos docs dentro para que pueda tener acceso a "data" y sus propiedades
 					{
 						uri: data.file.document,
 						fileType: data.file.fileType,

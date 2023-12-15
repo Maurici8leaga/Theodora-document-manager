@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-// static data
 import { fileService } from "../../../services/api/files.service";
 import { deleteDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
 import { folderImg } from "../../../services/utils/static.data";
@@ -10,30 +9,30 @@ const DeleteFile = (prop) => {
 
 	const dispatch = useDispatch();
 
+	// state for fata
 	const [title, setTitle] = useState("");
 	const [typeFile, setTypeFile] = useState("");
 
+	// function for delete a file and update the API and the store
 	const deleteFile = async (idFile) => {
-		// parte del patron para un loader;
-		// se setea en la llamada asincrona true afuera del trycatch
 		setLoading(true);
 		try {
 			await fileService.deleteFile(idFile);
 
 			dispatch(deleteDocument({ _id: idFile }));
-			// en este se pasa solo id porque el reducer esta esperando el id del document
-			setLoading(false); // se debe setear false cuando ya el store tiene el valor del objeto
+			setLoading(false);
 			setTitle("");
 			setTypeFile("");
 		} catch (error) {
 			console.log(error.stack);
-			setLoading(false); // se debe setear false si ocurre un error
+			setLoading(false);
 			setHasError(true);
 			setErrorMsg(error.response.data.message);
 		}
 	};
 
 	useEffect(() => {
+		// instance for get the title and type file of the document that will be deleted
 		if (idFile !== undefined && arrayDocuments) {
 			const fileSelected = arrayDocuments.find((item) => item._id === idFile);
 			if (fileSelected) {

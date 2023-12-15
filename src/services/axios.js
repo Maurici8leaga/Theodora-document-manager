@@ -1,11 +1,11 @@
 import axios from "axios";
 
-// DATO las variables de entorno de react tienes que comenzar con "REACT_APP"
+// Get the actual enviroment from .env file
 const APP_ENVIROMENT = process.env.REACT_APP_ENV;
 
 export let BASE_ENDPOINT = "";
 
-// metodo para cambiar el URL del server dinamicamente segun el entorno
+// Method for make BASE_ENDPOINT dinamyc by enviroment
 if (APP_ENVIROMENT === "development") {
 	BASE_ENDPOINT = "http://localhost:5001";
 } else if (APP_ENVIROMENT === "production") {
@@ -14,11 +14,9 @@ if (APP_ENVIROMENT === "development") {
 
 export const SERVER_URL = `${BASE_ENDPOINT}/api/v1`;
 
-// instancia desacoplada de axios con sus configuraciones, OJO para solicitudes con headers JSON
+// Function for request axios with header JSON
 export const axiosJSON = axios.create({
-	// de esta forma abstraida no se tiene que repetir esto constantemente para cada request
 	baseURL: SERVER_URL,
-	// para actualizar el document se debe colocar este header de tipo "application/json"
 	headers: {
 		"Content-Type": "application/json",
 		Accept: "application/json",
@@ -26,10 +24,9 @@ export const axiosJSON = axios.create({
 	withCredentials: true,
 });
 
-// instancia desacoplada de axios con sus configuraciones, OJO para solicitudes con headers MULTIPART
+// Function for request axios with header multipart
 export const axiosMultipart = axios.create({
 	baseURL: SERVER_URL,
-	// se debe usar este header para poder crear un file con title y document
 	headers: {
 		"Content-Type": "multipart/form-data",
 	},

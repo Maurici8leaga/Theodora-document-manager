@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-// static data
 import { fileService } from "../../../services/api/files.service";
 import { addDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
 import {
@@ -14,37 +13,33 @@ const CreateFile = (prop) => {
 
 	const dispatch = useDispatch();
 
+	// state for data
 	const [file, setFile] = useState("");
 
 	const onChangeFile = (event) => {
 		const fileSelected = event.target.files[0];
 		if (fileSelected) {
-			// se envia el file completo
 			setFile(fileSelected);
 		} else {
-			// si es undefined el file se debe colocar en blanco para que reseteé el state y no recuerde el anterior seleccionado
 			setFile("");
 			setHasError(true);
 			setErrorMsg(fileUndefined);
 		}
 	};
 
+	// function to reset inputs when user out of modal
 	const onClose = () => {
 		setTitlefile("");
-		// se debe colcar null el state del input file
 		setFile(null);
 
-		//+ para resetear el valor del input debe hacerse de esta forma, OJO NO TODOS LOS NAVEGADORES LO PERMITEN
 		const fileInput = document.getElementById("fileInput");
-		// esto es debido a que por razones de seguridad no se puede acceder al value del input con solo el useState
 		if (fileInput) {
 			fileInput.value = "";
 		}
 	};
 
+	// Function to create a file and send it to API
 	const createFile = async (event) => {
-		// parte del patron para un loader;
-		// se setea en la llamada asincrona true afuera del trycatch
 		setLoading(true);
 		try {
 			event.preventDefault();
@@ -52,36 +47,26 @@ const CreateFile = (prop) => {
 			if (titleFile.length > 2) {
 				const titleWithoutWhitespaces = titleFile.trim();
 
-				// El formData es un objeto que permite adjunta en el info del req.body y el req.file
-				// en este caso el titlo del file y el mismo file
 				const formData = new FormData();
-				// se usa "append" para adjuntarlo a el
 				formData.append("title", titleWithoutWhitespaces);
 				formData.append("document", file);
 
-				// request al action para crear el file
 				const { data } = await fileService.createFile(formData);
 
-				dispatch(
-					// aqui se usa el actions para crear un nuevo file
-					addDocument(data.file)
-					// se usa data.file ya que en file es que se encuentra el objeto final a procesar
-				);
-				setLoading(false); // se debe setear false cuando ya el store tiene el valor del objeto
-				// se resetea los valores del title y el file para que cuando se abra nuevamente esten los input vacios
+				dispatch(addDocument(data.file));
+				setLoading(false);
 				setTitlefile("");
 				setFile("");
 			} else {
 				setHasError(true);
 				setErrorMsg(titleNotAllowed);
-				setLoading(false); // se debe setear false si ocurre un error
+				setLoading(false);
 			}
 		} catch (error) {
 			console.log(error.stack);
 			setHasError(true);
-			// se coloca el mensaje de error del backend a display error
 			setErrorMsg(error.response.data.message);
-			setLoading(false); // se debe setear false si ocurre un error
+			setLoading(false);
 		}
 	};
 
@@ -116,7 +101,7 @@ const CreateFile = (prop) => {
 								value={titleFile}
 								className="form-control mb-3"
 								placeholder="File name"
-								maxLength={15} //para que no supere los 15 caracters que se establecio en el back
+								maxLength={15}
 								onChange={(event) => setTitlefile(event.target.value)}
 							/>
 
@@ -126,8 +111,6 @@ const CreateFile = (prop) => {
 								className="form-control"
 								type="file"
 								name="document"
-								// este atributo accept permite definir cuale tipos de archivos puede seleccionar el usuario
-								// estos tipos de formatos se llaman MIME  https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 								accept="application/pdf, text/plain, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 								onChange={onChangeFile}
 							/>
@@ -148,7 +131,6 @@ const CreateFile = (prop) => {
 									type="submit"
 									className="btn btn-outline-primary d-flex"
 									data-bs-dismiss="modal"
-									// se crea este disabled para reafirmar la seguridad de que no se envie ni el titulo vaacio ni el file
 									disabled={!titleFile || !file}
 								>
 									Add

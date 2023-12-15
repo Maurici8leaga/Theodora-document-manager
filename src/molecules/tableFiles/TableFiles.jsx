@@ -1,9 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-// static data
 import { BsPencil, BsTrash3, BsSearch } from "react-icons/bs";
-// css
 import "../tableFiles/TableFiles.css";
 
 const TableFiles = (prop) => {
@@ -14,6 +12,7 @@ const TableFiles = (prop) => {
 
 	const navigate = useNavigate();
 
+	// function for redirect to visualizer document
 	const watchFile = (id) => {
 		navigate(`/visualizer/${id}`);
 	};
