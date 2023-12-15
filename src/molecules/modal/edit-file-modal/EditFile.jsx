@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { fileService } from "../../../services/api/files.service";
 import { updateDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
 import { fileService } from "../../../services/api/files.service";
 import { titleNotAllowed } from "../../../services/utils/static.data";

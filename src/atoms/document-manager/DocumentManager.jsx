@@ -23,7 +23,6 @@ const DocumentManager = () => {
 	// Get files from store
 	const files = useSelector((state) => state.files.documents);
 
-	// state for authentication
 	const [tokeAuthentication] = useLocalStorage("token", "get");
 	const [titleFile, setTitlefile] = useState("");
 	const [idFile, setIdFile] = useState("");

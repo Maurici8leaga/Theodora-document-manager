@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Navbar from "../../molecules/navbar/Navbar";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import Navbar from "../../molecules/navbar/Navbar";
 import useLocalStorage from "../../hooks/useLocalStorage";
@@ -14,10 +15,8 @@ const VisualizerDocument = () => {
 	// hook navigate
 	const navigate = useNavigate();
 
-	// state for authentication
 	const [tokeAuthentication] = useLocalStorage("token", "get");
 
-	// state for file
 	const [file, setFile] = useState([]);
 
 	// state for errors
@@ -41,6 +40,7 @@ const VisualizerDocument = () => {
 						fileName: data.file.title,
 					},
 				];
+
 				setFile(docs);
 				setHasError(false);
 				setErrorMsg("");

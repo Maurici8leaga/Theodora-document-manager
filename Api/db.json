@@ -1,0 +1,16 @@
+{
+  "files": [
+    {
+      "id": 1,
+      "title": "Cv Mauricio Oleaga",
+      "document": "../../assets/documents/CV_Mauricio_Oleaga.pdf",
+      "fileType": "application/pdf"
+    },
+    {
+      "id": 2,
+      "title": "Prueba format",
+      "document": "../../assets/documents/Cover_letter.txt",
+      "fileType": "text/plain"
+    }
+  ]
+}
