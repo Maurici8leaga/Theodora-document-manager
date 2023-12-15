@@ -1,5 +1,4 @@
-// custom HOOKs
-
+// Custom Hook for set a local storage by type
 const useLocalStorage = (key, type) => {
 	try {
 		if (type === "get") {

@@ -2,48 +2,71 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { fileService } from "../../../services/api/files.service";
 import { addDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
-import { UtilsService } from "../../../services/utils/utils.service";
+import {
+	fileUndefined,
+	titleNotAllowed,
+} from "../../../services/utils/static.data";
 
 const CreateFile = (prop) => {
-	const { titleFile, setTitlefile, arrayFiles } = prop;
+	const { titleFile, setTitlefile, setHasError, setErrorMsg, setLoading } =
+		prop;
 
 	const dispatch = useDispatch();
 
+	// state for data
 	const [file, setFile] = useState("");
-	const [document, setDocument] = useState("");
 
 	const onChangeFile = (event) => {
 		const fileSelected = event.target.files[0];
 		if (fileSelected) {
-			setDocument(fileSelected.type);
-			setFile(event.target.value);
+			setFile(fileSelected);
+		} else {
+			setFile("");
+			setHasError(true);
+			setErrorMsg(fileUndefined);
 		}
 	};
 
+	// function to reset inputs when user out of modal
+	const onClose = () => {
+		setTitlefile("");
+		setFile(null);
+
+		const fileInput = document.getElementById("fileInput");
+		if (fileInput) {
+			fileInput.value = "";
+		}
+	};
+
+	// Function to create a file and send it to API
 	const createFile = async (event) => {
+		setLoading(true);
 		try {
 			event.preventDefault();
 
-			const maxId = UtilsService.maxId(arrayFiles);
+			if (titleFile.length > 2) {
+				const titleWithoutWhitespaces = titleFile.trim();
 
-			// function to filter the document types and returns the static document defined for each one
-			const { documentPath, fileType } =
-				UtilsService.setDocumentByType(document);
+				const formData = new FormData();
+				formData.append("title", titleWithoutWhitespaces);
+				formData.append("document", file);
 
-			const { data } = await fileService.createFile({
-				id: maxId + 1,
-				title: titleFile,
-				document: documentPath,
-				fileType,
-			});
+				const { data } = await fileService.createFile(formData);
 
-			dispatch(addDocument(data));
-
-			setTitlefile("");
-			setDocument("");
-			setFile("");
+				dispatch(addDocument(data.file));
+				setLoading(false);
+				setTitlefile("");
+				setFile("");
+			} else {
+				setHasError(true);
+				setErrorMsg(titleNotAllowed);
+				setLoading(false);
+			}
 		} catch (error) {
 			console.log(error.stack);
+			setHasError(true);
+			setErrorMsg(error.response.data.message);
+			setLoading(false);
 		}
 	};
 
@@ -66,6 +89,7 @@ const CreateFile = (prop) => {
 							className="btn-close"
 							data-bs-dismiss="modal"
 							aria-label="Close"
+							onClick={onClose}
 						></button>
 					</div>
 					<div className="modal-body">
@@ -77,18 +101,18 @@ const CreateFile = (prop) => {
 								value={titleFile}
 								className="form-control mb-3"
 								placeholder="File name"
+								maxLength={15}
 								onChange={(event) => setTitlefile(event.target.value)}
-								required
 							/>
 
 							<label className="form-label">File</label>
 							<input
+								id="fileInput"
 								className="form-control"
 								type="file"
 								name="document"
 								accept="application/pdf, text/plain, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 								onChange={onChangeFile}
-								required
 							/>
 							<div className="form-text mb-3">
 								<p> You can only choose file of type PDF, TXT or Word </p>
@@ -99,15 +123,15 @@ const CreateFile = (prop) => {
 									type="button"
 									className="btn btn-outline-secondary"
 									data-bs-dismiss="modal"
+									onClick={onClose}
 								>
 									Cancel
 								</button>
 								<button
 									type="submit"
 									className="btn btn-outline-primary d-flex"
-									data-bs-dismiss={`${
-										titleFile !== "" && file !== "" ? "modal" : null
-									}`}
+									data-bs-dismiss="modal"
+									disabled={!titleFile || !file}
 								>
 									Add
 								</button>

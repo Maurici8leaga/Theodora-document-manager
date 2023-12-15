@@ -2,49 +2,52 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../../molecules/navbar/Navbar";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
-import Login from "../auth/Login";
+import Navbar from "../../molecules/navbar/Navbar";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { fileService } from "../../services/api/files.service";
-import { urlWord } from "../../services/utils/static.data";
+import Login from "../auth/Login";
 import "../visualizer/VisualizerDocument.css";
 import "../../index.css";
 
 const VisualizerDocument = () => {
 	const { idFile } = useParams();
 
+	// hook navigate
 	const navigate = useNavigate();
 
 	const [tokeAuthentication] = useLocalStorage("token", "get");
 
 	const [file, setFile] = useState([]);
 
+	// state for errors
+	const [hasError, setHasError] = useState(false);
+	const [errorMsg, setErrorMsg] = useState("");
+
 	useEffect(() => {
 		if (!tokeAuthentication) {
 			navigate("/");
 		}
 
+		// function for request file by id to API
 		const fetchFileById = async () => {
 			try {
-				const idnum = parseInt(idFile);
-
-				const { data } = await fileService.getFileById(idnum);
-
-				const uri =
-					data.fileType !== "application/msword"
-						? `${process.env.PUBLIC_URL}${data.document}`
-						: urlWord;
+				const { data } = await fileService.getFileById(idFile);
 
 				const docs = [
 					{
-						uri,
-						fileType: data.fileType,
-						fileName: data.title,
+						uri: data.file.document,
+						fileType: data.file.fileType,
+						fileName: data.file.title,
 					},
 				];
 
 				setFile(docs);
+				setHasError(false);
+				setErrorMsg("");
 			} catch (error) {
 				console.log(error.stack);
+				setHasError(true);
+				setErrorMsg(error.response.data.message);
 			}
 		};
 
@@ -57,6 +60,11 @@ const VisualizerDocument = () => {
 				<div className="bg-custom">
 					<Navbar />
 					<div className="container-Visualizer">
+						{hasError && errorMsg && (
+							<div className="alert alert-danger" role="alert">
+								{errorMsg}
+							</div>
+						)}
 						<button
 							type="button"
 							className="btn btn-outline-secondary my-3"

@@ -5,28 +5,36 @@ import { deleteDocument } from "../../../redux-toolkit/reducers/files/files.redu
 import { folderImg } from "../../../services/utils/static.data";
 
 const DeleteFile = (prop) => {
-	const { idFile, arrayDocuments } = prop;
+	const { idFile, arrayDocuments, setHasError, setErrorMsg, setLoading } = prop;
 
 	const dispatch = useDispatch();
 
+	// state for fata
 	const [title, setTitle] = useState("");
 	const [typeFile, setTypeFile] = useState("");
 
+	// function for delete a file and update the API and the store
 	const deleteFile = async (idFile) => {
+		setLoading(true);
 		try {
-			await fileService.deleteFile({ id: idFile });
+			await fileService.deleteFile(idFile);
 
-			dispatch(deleteDocument({ id: idFile }));
+			dispatch(deleteDocument({ _id: idFile }));
+			setLoading(false);
 			setTitle("");
 			setTypeFile("");
 		} catch (error) {
 			console.log(error.stack);
+			setLoading(false);
+			setHasError(true);
+			setErrorMsg(error.response.data.message);
 		}
 	};
 
 	useEffect(() => {
+		// instance for get the title and type file of the document that will be deleted
 		if (idFile !== undefined && arrayDocuments) {
-			const fileSelected = arrayDocuments.find((item) => item.id === idFile);
+			const fileSelected = arrayDocuments.find((item) => item._id === idFile);
 			if (fileSelected) {
 				setTitle(fileSelected.title);
 				setTypeFile(fileSelected.fileType);

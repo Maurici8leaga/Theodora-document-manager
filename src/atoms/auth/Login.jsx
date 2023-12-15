@@ -10,9 +10,12 @@ import "../auth/Login.css";
 const Login = () => {
 	const navigate = useNavigate();
 
+	// states for data
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [setStoredUser] = useLocalStorage("token", "set");
+
+	// state for errors
 	const [error, setError] = useState(false);
 	const [errorMsg, setErrorMsg] = useState("");
 

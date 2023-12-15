@@ -15,18 +15,23 @@ const fileSlice = createSlice({
 			state.documents.push(action.payload);
 		},
 		updateDocument: (state, action) => {
-			const { id, title, document } = action.payload;
-			const file = state.documents.find((item) => item.id === id);
+			const { _id, title } = action.payload;
+
+			// find the document for updated it
+			const file = state.documents.find((item) => item._id === _id);
+
 			if (file) {
 				file.title = title;
-				file.document = document;
 			}
 		},
 		deleteDocument: (state, action) => {
-			const { id } = action.payload;
-			const file = state.documents.find((item) => item.id === id);
+			const { _id } = action.payload;
+
+			// find the document for delete it
+			const file = state.documents.find((item) => item._id === _id);
 			if (file) {
-				const data = state.documents.filter((item) => item.id !== id);
+				// removing the document from store
+				const data = state.documents.filter((item) => item._id !== _id);
 				return { ...state, documents: data };
 			}
 		},

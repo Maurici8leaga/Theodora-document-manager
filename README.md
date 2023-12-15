@@ -27,13 +27,18 @@ Which will run on the 3000 port of your browser, then open http://localhost:3000
 
 ### API
 
-To run the API you will have to open another terminal in your code editor, then you will have to run the following comand:
+To run the API you will have to follow the instructions found in the following link;
+
+https://github.com/Maurici8leaga/Backend-theodora-document-manager?tab=readme-ov-file#theodora-document-manager-server
+
+Once the commands have been executed and the API is running, you will be requested for username and password which those are;
 
 ```sh
-    npx json-server -p 3500 -w Api/db.json
+   username: admin
+   password: admin12345
 ```
 
-The number of port is up to you, but you need to make sure that the port is other than port 3000. After that, this comand will run a fake API with json-server. The fake data will saved in the db.json file that is in the Api folder at the beginning of the project.
+These parameters are default, that means there are no others than these.
 
 ## About
 
@@ -43,4 +48,4 @@ The UI was built with; React, react-dom, react-router-dom, react-redux, @reduxjs
 
 ### API
 
-The API was built with json-server.
+Basically the api was built with; node js, express and typescript if you want to know more details you can see it on the next page; https://github.com/Maurici8leaga/Backend-theodora-document-manager?tab=readme-ov-file#theodora-document-manager-server

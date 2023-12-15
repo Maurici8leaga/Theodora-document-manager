@@ -8,6 +8,7 @@ const Navbar = () => {
 
 	const [deleteStoredUser] = useLocalStorage("token", "delete");
 
+	// function to logout the user
 	const logOut = () => {
 		deleteStoredUser();
 		navigate("/");

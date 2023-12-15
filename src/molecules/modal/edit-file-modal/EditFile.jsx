@@ -2,47 +2,53 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fileService } from "../../../services/api/files.service";
 import { updateDocument } from "../../../redux-toolkit/reducers/files/files.reducer";
+import { fileService } from "../../../services/api/files.service";
+import { titleNotAllowed } from "../../../services/utils/static.data";
 
 const EditFile = (prop) => {
-	const { idFile, arrayDocuments } = prop;
+	const { idFile, arrayDocuments, setHasError, setErrorMsg, setLoading } = prop;
+
 	const dispatch = useDispatch();
 
+	// state for new title
 	const [newTitle, setNewTitle] = useState("");
-	const [documentUpdate, setDocumentUpdate] = useState("");
-	const [error, setError] = useState("");
 
+	// function for update the title to new one and send it to API
 	const updateFile = async (event) => {
+		setLoading(true);
 		try {
 			event.preventDefault();
 
-			if (newTitle.length > 0) {
-				const response = await fileService.updateFile({
-					id: documentUpdate.id,
-					title: newTitle,
-					document: documentUpdate.document,
+			// verification before update the title
+			if (newTitle.length > 2) {
+				// delete whitespaces of title
+				const verifyTitle = newTitle.trim();
+
+				const res = await fileService.updateFile(idFile, {
+					title: verifyTitle,
 				});
 
-				dispatch(updateDocument(response.data));
-				setError(null);
+				dispatch(updateDocument(res.data.file));
+				setLoading(false);
 			} else {
-				setError("Title can not be empty");
+				setLoading(false);
+				setHasError(true);
+				setErrorMsg(titleNotAllowed);
 			}
 		} catch (error) {
 			console.log(error.stack);
+			setLoading(false);
+			setHasError(true);
+			setErrorMsg(error.response.data.message);
 		}
 	};
 
-	const handleClose = () => {
-		setNewTitle(newTitle);
-		setError(null);
-	};
-
 	useEffect(() => {
+		// instance for get the title of the document before it is changed
 		if (idFile !== undefined && arrayDocuments) {
-			const fileSelected = arrayDocuments.find((item) => item.id === idFile);
+			const fileSelected = arrayDocuments.find((item) => item._id === idFile);
 			if (fileSelected) {
 				setNewTitle(fileSelected.title);
-				setDocumentUpdate(fileSelected);
 			}
 		}
 	}, [idFile, arrayDocuments]);
@@ -54,7 +60,6 @@ const EditFile = (prop) => {
 			tabIndex="-1"
 			aria-labelledby="editModalLabel"
 			aria-hidden="true"
-			onClick={handleClose}
 		>
 			<div className="modal-dialog modal-dialog-centered">
 				<div className="modal-content">
@@ -67,7 +72,6 @@ const EditFile = (prop) => {
 							className="btn-close"
 							data-bs-dismiss="modal"
 							aria-label="Close"
-							onClick={handleClose}
 						></button>
 					</div>
 					<div className="modal-body">
@@ -79,29 +83,24 @@ const EditFile = (prop) => {
 								type="text"
 								value={newTitle}
 								className="form-control mb-4"
-								placeholder="Title"
+								placeholder="New title"
+								maxLength={15}
 								onChange={(event) => setNewTitle(event.target.value)}
 							/>
-
-							{error ? (
-								<label className="form-label text-danger">{error}</label>
-							) : (
-								<></>
-							)}
 
 							<div className="modal-footer">
 								<button
 									type="button"
 									className="btn btn-outline-secondary"
 									data-bs-dismiss="modal"
-									onClick={handleClose}
 								>
-									Close
+									Cancel
 								</button>
 								<button
 									type="submit"
 									className="btn btn-outline-primary"
-									data-bs-dismiss={`${newTitle.length > 0 ? "modal" : null}`}
+									data-bs-dismiss="modal"
+									disabled={!newTitle}
 								>
 									Save changes
 								</button>
