@@ -28,6 +28,6 @@ body {
 
 .bg-custom {
 	height: 100vh;
-	background-color: var(--secundary);
+	background-color: var(--lilac);
 	overflow: scroll;
 }

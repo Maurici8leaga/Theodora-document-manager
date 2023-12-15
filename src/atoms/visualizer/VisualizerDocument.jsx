@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Navbar from "../../molecules/navbar/Navbar";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import Navbar from "../../molecules/navbar/Navbar";
 import useLocalStorage from "../../hooks/useLocalStorage";
